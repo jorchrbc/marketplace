@@ -20,47 +20,21 @@ class _RegisterView extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 100),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Register',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40
-                )
-              ),
-              SizedBox(height: 30),
-              _RegisterForm(),
-              SizedBox(height: 100),
-              ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 150,
-                    vertical: 20
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  )
-                ),
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20
-                  )
-                )
-              )
-            ]
-          )
-        )
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 100),
+      child: Column(
+        children: [
+          Text(
+            'Register',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.bold,
+              fontSize: 40
+            )
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height*0.08),
+          _RegisterForm(),
+          
+        ]
       )
     );
   }
@@ -80,6 +54,16 @@ class _RegisterFormState extends State<_RegisterForm>{
   final password_controller = TextEditingController();
   final confirm_password_controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose(){
+    name_controller.dispose();
+    phone_controller.dispose();
+    email_controller.dispose();
+    password_controller.dispose();
+    confirm_password_controller.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context){
@@ -97,19 +81,19 @@ class _RegisterFormState extends State<_RegisterForm>{
               return null;
             }
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 25),
           CustomTextFormField(
             hint: 'Phone',
             icon: Icon(Icons.phone),
             controller: phone_controller,
             validator: (value) {
-              if(value == null || value.trim()!.isEmpty) return 'Phone is required';
+              if(value == null || value.trim().isEmpty) return 'Phone is required';
               final cleaned_value = value.replaceAll(RegExp(r'[\s-]'), '');
               if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleaned_value)) return 'Enter a valid phone';
               return null;
             }
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 25),
           CustomTextFormField(
             hint: 'Email',
             icon: Icon(Icons.email),
@@ -120,10 +104,10 @@ class _RegisterFormState extends State<_RegisterForm>{
               return null;
             }
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 25),
           CustomTextFormField(
             hint: 'Password',
-            icon: Icon(Icons.password),
+            icon: Icon(Icons.lock_outline),
             controller: password_controller,
             validator: (value) {
               if(value == null || value.isEmpty){
@@ -134,10 +118,10 @@ class _RegisterFormState extends State<_RegisterForm>{
               return null;
             }
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 25),
           CustomTextFormField(
             hint: 'Confirm password',
-            icon: Icon(Icons.remove_red_eye),
+            icon: Icon(Icons.lock),
             controller: confirm_password_controller,
             validator: (value) {
               if(value == null || value.isEmpty){
@@ -147,21 +131,39 @@ class _RegisterFormState extends State<_RegisterForm>{
               return null;
             }
           ),
-          ElevatedButton(
-            onPressed: (){
-              // print('name_controller: ${name_controller.text}');
-              // print('phone_controller: ${phone_controller.text}');
-              // print('email_controller: ${email_controller.text}');
-              // print('password_controller: ${password_controller.text}');
-              // print('confirm_passowrd_controller: ${confirm_password_controller.text}');
-              if(_formKey.currentState!.validate()){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data')),
-                );
-              }
-            },
-            child: Text('Testing')
-          ),
+          SizedBox(height: MediaQuery.of(context).size.height*0.1),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: (){
+                  // print('name_controller: ${name_controller.text}');
+                  // print('phone_controller: ${phone_controller.text}');
+                  // print('email_controller: ${email_controller.text}');
+                  // print('password_controller: ${password_controller.text}');
+                  // print('confirm_passowrd_controller: ${confirm_password_controller.text}');
+                  if(_formKey.currentState!.validate()){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                )
+              ),
+              child: Text(
+                'Register',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20
+                )
+              )
+            ),
+          )
         ]
       )
     );

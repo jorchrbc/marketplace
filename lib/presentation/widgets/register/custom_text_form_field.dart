@@ -20,10 +20,6 @@ class CustomTextFormField extends StatefulWidget{
 class _CustomTextFormField extends State<CustomTextFormField>{
 
   @override
-  void dispose(){
-    widget.controller.dispose();
-    super.dispose();
-  }
   Widget build(BuildContext context){
     return TextFormField(
       validator: widget.validator,
