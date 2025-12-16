@@ -7,10 +7,10 @@ class RegisterScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Marketplace'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Marketplace'),
+      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      // ),
       body: _RegisterView()
     );
   }
@@ -27,10 +27,11 @@ class _RegisterView extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Create account',
+                'Register',
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
-                  fontSize: 27
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40
                 )
               ),
               SizedBox(height: 30),
@@ -38,7 +39,24 @@ class _RegisterView extends StatelessWidget{
               SizedBox(height: 100),
               ElevatedButton(
                 onPressed: (){},
-                child: Text('Register')
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 150,
+                    vertical: 20
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  )
+                ),
+                child: Text(
+                  'Register',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                  )
+                )
               )
             ]
           )
@@ -56,35 +74,94 @@ class _RegisterForm extends StatefulWidget{
 }
 
 class _RegisterFormState extends State<_RegisterForm>{
+  final name_controller = TextEditingController();
+  final phone_controller = TextEditingController();
+  final email_controller = TextEditingController();
+  final password_controller = TextEditingController();
+  final confirm_password_controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  
   @override
   Widget build(BuildContext context){
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           CustomTextFormField(
             hint: 'Name',
-            icon: Icon(Icons.person)
+            icon: Icon(Icons.person),
+            controller: name_controller,
+            validator: (value) {
+              if(value == null || value.isEmpty) return 'Name is required';
+              if(!RegExp(r'^[A-Za-z]+$').hasMatch(value)) return 'Only letters are allowed';
+              return null;
+            }
           ),
           SizedBox(height: 15),
           CustomTextFormField(
             hint: 'Phone',
-            icon: Icon(Icons.phone)
+            icon: Icon(Icons.phone),
+            controller: phone_controller,
+            validator: (value) {
+              if(value == null || value.trim()!.isEmpty) return 'Phone is required';
+              final cleaned_value = value.replaceAll(RegExp(r'[\s-]'), '');
+              if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleaned_value)) return 'Enter a valid phone';
+              return null;
+            }
           ),
           SizedBox(height: 15),
           CustomTextFormField(
             hint: 'Email',
-            icon: Icon(Icons.email)
+            icon: Icon(Icons.email),
+            controller: email_controller,
+            validator: (value) {
+              if(value == null || value.isEmpty) return 'Please enter some text';
+              if(!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Not email form allowed';
+              return null;
+            }
           ),
           SizedBox(height: 15),
           CustomTextFormField(
             hint: 'Password',
-            icon: Icon(Icons.password)
+            icon: Icon(Icons.password),
+            controller: password_controller,
+            validator: (value) {
+              if(value == null || value.isEmpty){
+                return 'Please enter some text';
+              }
+              if(value.length < 8) return 'Please enter a password of at least 8 characters';
+              if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$').hasMatch(value)) return 'Please enter a password using lower and uppercase, at least a number and a special character';
+              return null;
+            }
           ),
           SizedBox(height: 15),
           CustomTextFormField(
             hint: 'Confirm password',
-            icon: Icon(Icons.remove_red_eye)
-          )
+            icon: Icon(Icons.remove_red_eye),
+            controller: confirm_password_controller,
+            validator: (value) {
+              if(value == null || value.isEmpty){
+                return 'Please enter some text';
+              }
+              if(value != password_controller.text) return 'Passwords do not match';
+              return null;
+            }
+          ),
+          ElevatedButton(
+            onPressed: (){
+              // print('name_controller: ${name_controller.text}');
+              // print('phone_controller: ${phone_controller.text}');
+              // print('email_controller: ${email_controller.text}');
+              // print('password_controller: ${password_controller.text}');
+              // print('confirm_passowrd_controller: ${confirm_password_controller.text}');
+              if(_formKey.currentState!.validate()){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Processing Data')),
+                );
+              }
+            },
+            child: Text('Testing')
+          ),
         ]
       )
     );
