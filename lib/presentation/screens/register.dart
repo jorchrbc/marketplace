@@ -48,20 +48,20 @@ class _RegisterForm extends StatefulWidget{
 }
 
 class _RegisterFormState extends State<_RegisterForm>{
-  final name_controller = TextEditingController();
-  final phone_controller = TextEditingController();
-  final email_controller = TextEditingController();
-  final password_controller = TextEditingController();
-  final confirm_password_controller = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose(){
-    name_controller.dispose();
-    phone_controller.dispose();
-    email_controller.dispose();
-    password_controller.dispose();
-    confirm_password_controller.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
   
@@ -74,7 +74,7 @@ class _RegisterFormState extends State<_RegisterForm>{
           CustomTextFormField(
             hint: 'Name',
             icon: Icon(Icons.person),
-            controller: name_controller,
+            controller: nameController,
             validator: (value) {
               if(value == null || value.isEmpty) return 'Name is required';
               if(!RegExp(r'^[A-Za-z]+$').hasMatch(value)) return 'Only letters are allowed';
@@ -85,11 +85,11 @@ class _RegisterFormState extends State<_RegisterForm>{
           CustomTextFormField(
             hint: 'Phone',
             icon: Icon(Icons.phone),
-            controller: phone_controller,
+            controller: phoneController,
             validator: (value) {
               if(value == null || value.trim().isEmpty) return 'Phone is required';
-              final cleaned_value = value.replaceAll(RegExp(r'[\s-]'), '');
-              if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleaned_value)) return 'Enter a valid phone';
+              final cleanedValue = value.replaceAll(RegExp(r'[\s-]'), '');
+              if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleanedValue)) return 'Enter a valid phone';
               return null;
             }
           ),
@@ -97,7 +97,7 @@ class _RegisterFormState extends State<_RegisterForm>{
           CustomTextFormField(
             hint: 'Email',
             icon: Icon(Icons.email),
-            controller: email_controller,
+            controller: emailController,
             validator: (value) {
               if(value == null || value.isEmpty) return 'Please enter some text';
               if(!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Not email form allowed';
@@ -108,7 +108,7 @@ class _RegisterFormState extends State<_RegisterForm>{
           CustomTextFormField(
             hint: 'Password',
             icon: Icon(Icons.lock_outline),
-            controller: password_controller,
+            controller: passwordController,
             validator: (value) {
               if(value == null || value.isEmpty){
                 return 'Please enter some text';
@@ -122,12 +122,12 @@ class _RegisterFormState extends State<_RegisterForm>{
           CustomTextFormField(
             hint: 'Confirm password',
             icon: Icon(Icons.lock),
-            controller: confirm_password_controller,
+            controller: confirmPasswordController,
             validator: (value) {
               if(value == null || value.isEmpty){
                 return 'Please enter some text';
               }
-              if(value != password_controller.text) return 'Passwords do not match';
+              if(value != passwordController.text) return 'Passwords do not match';
               return null;
             }
           ),
