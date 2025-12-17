@@ -179,7 +179,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
+                    
+                    // Boton CREAR CUENTA
+                    TextButton(
+                      onPressed: () {
+                        // Acción para crear cuenta
+                      },
+                      child: const Text(
+                        'Crear cuenta',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
