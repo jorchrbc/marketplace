@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -160,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Datos válidos')),
                             );
+                            context.goNamed('home');
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -184,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Boton CREAR CUENTA
                     TextButton(
                       onPressed: () {
-                        // Acción para crear cuenta
+                        context.goNamed('register');
                       },
                       child: const Text(
                         'Crear cuenta',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/providers/register_provider.dart';
 import 'package:marketplace/presentation/widgets/register/register_widgets.dart';
 
@@ -142,6 +143,7 @@ class _RegisterFormState extends State<_RegisterForm>{
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('User saved: ${registerProvider.user?.name ?? ''}')),
                 );
+                context.goNamed('login');
               }
             },
             text: 'Register',
@@ -149,7 +151,7 @@ class _RegisterFormState extends State<_RegisterForm>{
           SizedBox(height: 15),
           CustomElevatedButton(
             onPressed: (){
-              //context.push('/login');
+              context.goNamed('login');
             },
             text: 'Go back',
             color: Theme.of(context).colorScheme.inversePrimary,
