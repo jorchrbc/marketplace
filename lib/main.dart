@@ -17,10 +17,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
       ],
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: appRouter,
-        title: 'Flutter Demo',
+        title: 'MarketPlace',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF3EC6AF),
+            primary: const Color(0xFF3EC6AF)
+          ),
         ),
       ),
     );

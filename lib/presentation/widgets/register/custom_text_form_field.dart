@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 
-class CustomTextFormField extends StatefulWidget{
+class CustomTextFormField extends StatelessWidget {
   final String hint;
   final Icon icon;
-  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
   final String? Function(String?) validator;
-  
+
   const CustomTextFormField({
-      required this.hint,
-      required this.icon,
-      required this.controller,
-      required this.validator,
+    super.key,
+    required this.hint,
+    required this.icon,
+    required this.validator,
+    required this.onChanged,
   });
 
   @override
-  State<CustomTextFormField> createState() => _CustomTextFormField();
-}
-
-class _CustomTextFormField extends State<CustomTextFormField>{
-
-  @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return TextFormField(
-      validator: widget.validator,
-      controller: widget.controller,
+      validator: validator,
+      onChanged: onChanged,
       decoration: InputDecoration(
-        icon: widget.icon,
-        hintText: widget.hint
-      )
+        icon: icon,
+        hintText: hint,
+      ),
     );
   }
 }
