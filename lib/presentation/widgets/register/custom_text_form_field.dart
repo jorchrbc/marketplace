@@ -22,6 +22,7 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         icon: icon,
         hintText: hint,
+        helperText: ' ',
       ),
     );
   }

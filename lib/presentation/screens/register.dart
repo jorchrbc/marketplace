@@ -10,7 +10,9 @@ class RegisterScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: _RegisterView()
+      body: SafeArea(
+        child: _RegisterView()
+      ),
     );
   }
 }
@@ -19,20 +21,18 @@ class _RegisterView extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: Column(
         children: [
           Text(
-            'Register',
+            'Crear cuenta',
             style: TextStyle(
-              decoration: TextDecoration.underline,
               fontWeight: FontWeight.bold,
               fontSize: 40
             )
           ),
-          SizedBox(height: MediaQuery.of(context).size.height*0.05),
-          _RegisterForm(),
-          
+          SizedBox(height: 30),
+          _RegisterForm()
         ]
       )
     );
@@ -56,104 +56,99 @@ class _RegisterFormState extends State<_RegisterForm>{
       child: Column(
         children: [
           CustomTextFormField(
-            hint: 'Name',
+            hint: 'Nombre',
             icon: Icon(Icons.person_outlined),
             onChanged: (value){
               registerProvider.name = value!;
             },
             validator: (value) {
-              if(value == null || value.isEmpty) return 'Name is required';
-              if(!RegExp(r'^[A-Za-z ]+$').hasMatch(value)) return 'Only letters are allowed';
+              if(value == null || value.isEmpty) return 'Se requiere nombre';
+              if(!RegExp(r'^[A-Za-z ]+$').hasMatch(value)) return 'Solo se permiten letras';
               return null;
             },
           ),
-          SizedBox(height: 25),
           CustomTextFormField(
-            hint: 'Last name',
+            hint: 'Apellidos',
             icon: Icon(Icons.person),
             onChanged: (value){
               registerProvider.lastName = value!;
             },
             validator: (value) {
-              if(value == null || value.isEmpty) return 'Last name is required';
-              if(!RegExp(r'^[A-Za-z ]+$').hasMatch(value)) return 'Only letters are allowed';
+              if(value == null || value.isEmpty) return 'Se requieren apellidos';
+              if(!RegExp(r'^[A-Za-z ]+$').hasMatch(value)) return 'Solo se permiten letras';
               return null;
             },
           ),
-          SizedBox(height: 25),
           CustomTextFormField(
-            hint: 'Phone',
-            icon: Icon(Icons.phone),
+            hint: 'Teléfono',
+            icon: Icon(Icons.phone_outlined),
             onChanged: (value){
               registerProvider.phone = value!;
             },
             validator: (value) {
-              if(value == null || value.trim().isEmpty) return 'Phone is required';
+              if(value == null || value.trim().isEmpty) return 'Se requiere teléfono';
               final cleanedValue = value.replaceAll(RegExp(r'[\s-]'), '');
-              if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleanedValue)) return 'Enter a valid phone';
+              if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleanedValue)) return 'Ingresa un número váldo';
               return null;
             },
           ),
-          SizedBox(height: 25),
           CustomTextFormField(
-            hint: 'Email',
-            icon: Icon(Icons.email),
+            hint: 'Correo electrónico',
+            icon: Icon(Icons.email_outlined),
             onChanged: (value){
               registerProvider.email = value!;
             },
             validator: (value) {
-              if(value == null || value.isEmpty) return 'Email is required';
-              if(!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Not email form allowed';
+              if(value == null || value.isEmpty) return 'Se requiere correo electrónico';
+              if(!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Formato de correo electrónico no válido';
               return null;
             },
           ),
-          SizedBox(height: 25),
           CustomTextFormField(
-            hint: 'Password',
+            hint: 'Contraseña',
             icon: Icon(Icons.lock_outline),
             onChanged: (value){
               registerProvider.password = value!;
             },
             validator: (value) {
-              if(value == null || value.isEmpty) return 'Password is required';
-              if(value.length < 8) return 'Please enter a password of at least 8 characters';
-              if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$').hasMatch(value)) return 'Please enter a password using lower and uppercase, at least a number and a special character';
+              if(value == null || value.isEmpty) return 'Se require contraseña';
+              if(value.length < 8) return 'Ingresa una contraseña de al menos 8 caracteres';
+              if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$').hasMatch(value)) return 'Utiliza una contraseña con al menos una minúscula, una mayúscula y un número';
               return null;
             },
 
           ),
-          SizedBox(height: 25),
           CustomTextFormField(
-            hint: 'Confirm password',
+            hint: 'Confirmar contraseña',
             icon: Icon(Icons.lock),
             onChanged: (value){
               registerProvider.confirmPassword = value!;
             },
             validator: (value) {
-              if(value == null || value.isEmpty)  return 'Confirm password is required';
-              if(value != registerProvider.password) return 'Passwords do not match';
+              if(value == null || value.isEmpty)  return 'Se requiere confirmar contraseña';
+              if(value != registerProvider.password) return 'Contraseñas no coinciden';
               return null;
             },
           ),
-          SizedBox(height: MediaQuery.of(context).size.height*0.06),
+          SizedBox(height: 50),
           CustomElevatedButton(
             onPressed: (){
               if(registerProvider.validateUser()){
                 registerProvider.saveUser();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('User saved: ${registerProvider.user?.name ?? ''}')),
+                  SnackBar(content: Text('Cuenta creada: ${registerProvider.user?.name ?? ''}')),
                 );
                 context.goNamed('login');
               }
             },
-            text: 'Register',
+            text: 'Crear',
           ),
           SizedBox(height: 15),
           CustomElevatedButton(
             onPressed: (){
               context.goNamed('login');
             },
-            text: 'Go back',
+            text: 'Regresar',
             color: Theme.of(context).colorScheme.inversePrimary,
           ),
         ]

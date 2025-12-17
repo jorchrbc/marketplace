@@ -9,12 +9,13 @@ class CustomElevatedButton extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: double.infinity,
       height: 50,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: color ?? Theme.of(context).colorScheme.primary,
+          elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           )
