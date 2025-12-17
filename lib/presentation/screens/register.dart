@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:marketplace/presentation/providers/register_provider.dart';
-import 'package:marketplace/presentation/widgets/register/custom_text_form_field.dart';
+import 'package:marketplace/presentation/widgets/register/register_widgets.dart';
 
 class RegisterScreen extends StatelessWidget{
   const RegisterScreen({super.key});
@@ -18,7 +18,7 @@ class _RegisterView extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 100),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
       child: Column(
         children: [
           Text(
@@ -29,7 +29,7 @@ class _RegisterView extends StatelessWidget{
               fontSize: 40
             )
           ),
-          SizedBox(height: MediaQuery.of(context).size.height*0.08),
+          SizedBox(height: MediaQuery.of(context).size.height*0.05),
           _RegisterForm(),
           
         ]
@@ -134,35 +134,26 @@ class _RegisterFormState extends State<_RegisterForm>{
               return null;
             },
           ),
-          SizedBox(height: MediaQuery.of(context).size.height*0.1),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: (){
-                  if(registerProvider.validateUser()){
-                    registerProvider.saveUser();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('User saved: ${registerProvider.user?.name ?? ''}')),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                )
-              ),
-              child: Text(
-                'Register',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20
-                )
-              )
-            ),
-          )
+          SizedBox(height: MediaQuery.of(context).size.height*0.06),
+          CustomElevatedButton(
+            onPressed: (){
+              if(registerProvider.validateUser()){
+                registerProvider.saveUser();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('User saved: ${registerProvider.user?.name ?? ''}')),
+                );
+              }
+            },
+            text: 'Register',
+          ),
+          SizedBox(height: 15),
+          CustomElevatedButton(
+            onPressed: (){
+              //context.push('/login');
+            },
+            text: 'Go back',
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
         ]
       )
     );

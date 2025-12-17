@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xFF3EC6AF),
-            primary: const Color(0xFF3EC6AF)
+            primary: const Color(0xFF3EC6AF),
+            inversePrimary: const Color(0xFF2563EB)
           ),
         ),
       ),
