@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:marketplace/presentation/providers/register_provider.dart';
 import 'package:marketplace/presentation/widgets/register/custom_text_form_field.dart';
 
 class RegisterScreen extends StatelessWidget{
@@ -67,8 +69,9 @@ class _RegisterFormState extends State<_RegisterForm>{
   
   @override
   Widget build(BuildContext context){
+    final registerProvider = Provider.of<RegisterProvider>(context);
     return Form(
-      key: _formKey,
+      key: registerProvider.formKey,
       child: Column(
         children: [
           CustomTextFormField(
@@ -137,14 +140,16 @@ class _RegisterFormState extends State<_RegisterForm>{
               height: 50,
               child: ElevatedButton(
                 onPressed: (){
-                  // print('name_controller: ${name_controller.text}');
-                  // print('phone_controller: ${phone_controller.text}');
-                  // print('email_controller: ${email_controller.text}');
-                  // print('password_controller: ${password_controller.text}');
-                  // print('confirm_passowrd_controller: ${confirm_password_controller.text}');
-                  if(_formKey.currentState!.validate()){
+                  if(registerProvider.validateUser()){
+                    registerProvider.saveUser(
+                      name: nameController.text,
+                      phone: phoneController.text,
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
+                      SnackBar(content: Text('User saved: ${registerProvider.user?.name ?? ''}')),
                     );
                   }
                 },

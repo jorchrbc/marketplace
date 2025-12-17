@@ -13,18 +13,13 @@ class RegisterProvider extends ChangeNotifier{
   User? user;
 
   bool validateUser(){
-    return formKey.currentState!.validate();
+    return formKey.currentState?.validate() ?? false;
   }
 
-  void saveUser(){
-    if(validateUser()){
-      user = User(
-        name: name,
-        phone: phone,
-        email: email,
-        password: password
-      );
-      notifyListeners();
-    }
+void saveUser({required String name, required String phone, required String email, required String password}) {
+  if(validateUser()){
+    user = User(name: name, phone: phone, email: email, password: password);
+    notifyListeners();
   }
+}
 }
