@@ -188,10 +188,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         context.goNamed('register');
                       },
-                      child: const Text(
+                      child: Text(
                         'Crear cuenta',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: Theme.of(context).colorScheme.inversePrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
