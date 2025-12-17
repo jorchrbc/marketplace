@@ -113,7 +113,7 @@ class _RegisterFormState extends State<_RegisterForm>{
             validator: (value) {
               if(value == null || value.isEmpty) return 'Se require contraseña';
               if(value.length < 8) return 'Ingresa una contraseña de al menos 8 caracteres';
-              if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$').hasMatch(value)) return 'Utiliza una contraseña con al menos una minúscula, una mayúscula y un número';
+              if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$').hasMatch(value)) return 'Utiliza una contraseña con al menos una minúscula, una mayúscula y un número';
               return null;
             },
 
