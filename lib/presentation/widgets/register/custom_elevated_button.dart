@@ -4,7 +4,7 @@ class CustomElevatedButton extends StatelessWidget{
   final VoidCallback? onPressed;
   final String? text;
   final Color? color;
-  CustomElevatedButton({this.onPressed, this.text, this.color});
+  const CustomElevatedButton({this.onPressed, this.text, this.color});
   
   @override
   Widget build(BuildContext context){
