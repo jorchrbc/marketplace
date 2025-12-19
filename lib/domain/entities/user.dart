@@ -14,4 +14,14 @@ class User{
     required this.password,
     required this.role,
   });
+
+  Map<String, dynamic> toMap(){
+    return {
+      "name": '$name $lastName',
+      "email": email,
+      "number": phone,
+      "password": password,
+      "role_id": ((role == 'Vendedor') ? 2 : 3).toString(),
+    };
+  }
 }

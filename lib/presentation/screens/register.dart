@@ -153,13 +153,20 @@ class _RegisterFormState extends State<_RegisterForm>{
           ],
           SizedBox(height: 50),
           CustomElevatedButton(
-            onPressed: (){
+            onPressed: () async {
               if(registerProvider.validateUser()){
                 registerProvider.saveUser();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Cuenta creada: ${registerProvider.user?.name ?? ''}')),
-                );
-                context.goNamed('login');
+                try{
+                  await registerProvider.register(registerProvider.user!);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Cuenta creada: ${registerProvider.user?.name ?? ''}')),
+                  );
+                  context.goNamed('login');
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error al crear cuenta: $e')),
+                  );
+                }
               }
             },
             text: 'Crear',
