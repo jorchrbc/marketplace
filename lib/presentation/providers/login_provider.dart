@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/domain/entities/user.dart';
 import 'package:marketplace/domain/repositories/auth_repository.dart';
 
-class LoginProvider extends ChangeNotifier{
+class LoginProvider extends ChangeNotifier {
   String email = '';
   String password = '';
+  bool isLoading = false;
+  String? errorMessage;
 
-  AuthRepository authRepository;
+  final AuthRepository authRepository;
 
   LoginProvider({required this.authRepository});
 
-  Future<void> login(User user) async{
-    await authRepository.loginUser(email, password);
+  void updateEmail(String value) {
+    email = value;
+    notifyListeners();
+  }
+
+  void updatePassword(String value) {
+    password = value;
+    notifyListeners();
+  }
+
+  Future<bool> login() async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final result = await authRepository.loginUser(email, password);
+      // TODO: Save token and user info
+      print('Login success: $result');
+      isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = e.toString().replaceAll('Exception: ', '');
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
   }
 }

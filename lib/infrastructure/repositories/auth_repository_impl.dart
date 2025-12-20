@@ -12,7 +12,12 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
-  Future<void> loginUser(String email, String password) {
+  Future<Map<String, dynamic>> loginUser(String email, String password) {
     return datasource.loginUser(email, password);
+  }
+
+  @override
+  Future<void> logoutUser() {
+    return datasource.logoutUser();
   }
 }

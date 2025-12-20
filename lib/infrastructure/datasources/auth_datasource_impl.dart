@@ -30,9 +30,43 @@ class AuthDatasourceImpl implements AuthDatasource {
     }
   }
 
-  Future<void> loginUser(String email, String password) {
-    // Implement login logic here
-    throw UnimplementedError();
+  @override
+  Future<Map<String, dynamic>> loginUser(String email, String password) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(loginMutation),
+      variables: {
+        'login': email,
+        'password': password,
+      },
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      if (result.exception!.graphqlErrors.isNotEmpty) {
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
+      throw Exception(result.exception.toString());
+    }
+
+    final data = result.data?['login'];
+    if (data == null) {
+      throw Exception('Login failed: No data returned');
+    }
+
+    return data;
   }
 
+  @override
+  Future<void> logoutUser() async {
+    final MutationOptions options = MutationOptions(
+      document: gql(logoutMutation),
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
+  }
 }
