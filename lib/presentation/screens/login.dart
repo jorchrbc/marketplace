@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:marketplace/presentation/providers/login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -65,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     // Campo EMAIL o USUARIO
                     TextFormField(
+                      onChanged: (value) => context.read<LoginProvider>().updateEmail(value),
                       //* Campo de validación para el email o usuario
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -118,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // Campo PASSWORD
                     TextFormField(
+                      onChanged: (value) => context.read<LoginProvider>().updatePassword(value),
                       //* Campo de validación para la contraseña
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -156,12 +160,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Datos válidos')),
-                            );
-                            context.goNamed('home');
+                            final loginProvider = context.read<LoginProvider>();
+                            final success = await loginProvider.login();
+                            
+                            if (!context.mounted) return;
+
+                            if (success) {
+                              context.goNamed('home');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(loginProvider.errorMessage ?? 'Error al iniciar sesión')),
+                              );
+                            }
                           }
                         },
                         style: ElevatedButton.styleFrom(

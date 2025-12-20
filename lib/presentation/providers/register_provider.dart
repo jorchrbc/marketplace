@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:marketplace/domain/entities/user.dart';
+import 'package:marketplace/domain/repositories/auth_repository.dart';
 
 class RegisterProvider extends ChangeNotifier{
 
@@ -14,6 +14,9 @@ class RegisterProvider extends ChangeNotifier{
   String? roleError;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   User? user;
+  AuthRepository authRepository;
+
+  RegisterProvider({required this.authRepository});
 
   void setRole(String value){
     role = value;
@@ -40,6 +43,9 @@ class RegisterProvider extends ChangeNotifier{
 
   void saveUser() {
     user = User(name: name, lastName: lastName, phone: phone, email: email, password: password, role: role);
-    notifyListeners();
+  }
+
+  Future<void> register(User user) async{
+    await authRepository.registerUser(user);
   }
 }
