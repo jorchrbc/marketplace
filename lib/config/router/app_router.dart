@@ -7,6 +7,7 @@ final appRouter = GoRouter(
       path: '/',
       name: 'login',
       builder: (context, state) => const LoginScreen(),
+
     ),
     GoRoute(
       path: '/register',
@@ -16,6 +17,11 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/home',
       name: 'home',
+      builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
+    ),
+    GoRoute(
+      path: '/product_form',
+      name: 'ProductForm',
       builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
     ),
   ]
