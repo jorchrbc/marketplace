@@ -31,7 +31,7 @@ class AuthDatasourceImpl implements AuthDatasource {
 
       if(result.hasException){
         if(result.exception!.linkException != null){
-          return {"connection": ["The connection failed"]};
+          return {"connection": "La conexión falló"};
         }
         if(result.exception!.graphqlErrors.isNotEmpty){
           var errors;
