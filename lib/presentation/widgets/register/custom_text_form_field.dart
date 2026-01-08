@@ -4,25 +4,25 @@ class CustomTextFormField extends StatelessWidget {
   final String hint;
   final Icon icon;
   final ValueChanged<String> onChanged;
-  final String? Function(String?) validator;
+  final String? errorText;
 
   const CustomTextFormField({
     super.key,
     required this.hint,
     required this.icon,
-    required this.validator,
     required this.onChanged,
+    this.errorText
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: validator,
       onChanged: onChanged,
       decoration: InputDecoration(
         icon: icon,
         hintText: hint,
         helperText: ' ',
+        errorText: errorText
       ),
     );
   }

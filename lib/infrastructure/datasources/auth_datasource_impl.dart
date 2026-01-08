@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
 import 'package:marketplace/domain/entities/user.dart';
@@ -15,18 +17,36 @@ class AuthDatasourceImpl implements AuthDatasource {
     }
 
   @override
-  Future<void> registerUser(User user) async {
-    final MutationOptions options = MutationOptions(
-      document: gql(createUserMutation),
-      variables: user.toMap(),
-    );
+  Future<Map<String,dynamic>> registerUser(User user) async {
+    try{
+      final MutationOptions options = MutationOptions(
+        document: gql(createUserMutation),
+        variables: user.toMap(),
+      );
 
-    final result = await client.mutate(options);
+      final result = await client
+        .mutate(options)
+        .timeout(const Duration(seconds: 12));
 
-    if(result.hasException){
-      print('Error: ${result.exception.toString()}');
-    } else {
+
+      if(result.hasException){
+        if(result.exception!.linkException != null){
+          return {"connection": ["The connection failed"]};
+        }
+        if(result.exception!.graphqlErrors.isNotEmpty){
+          var errors;
+          for(var error in result.exception!.graphqlErrors){
+            errors = error.extensions?['validation'];
+          }
+          return errors;
+        }
+      }
       print("Usuario creado: ${result.data?['createUser']}");
+      return <String, dynamic>{};
+    } on TimeoutException{
+      return {"connection": "Revisa tu conexión"};
+    } on SocketException{
+      return {"connection": "Error en el servidor"};
     }
   }
 

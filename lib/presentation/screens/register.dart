@@ -52,82 +52,64 @@ class _RegisterFormState extends State<_RegisterForm>{
   Widget build(BuildContext context){
     final registerProvider = Provider.of<RegisterProvider>(context);
     return Form(
-      key: registerProvider.formKey,
       child: Column(
         children: [
           CustomTextFormField(
             hint: 'Nombre',
+            errorText: registerProvider.nameError,
             icon: Icon(Icons.person_outlined),
             onChanged: (value){
               registerProvider.name = value;
-            },
-            validator: (value) {
-              if(value == null || value.isEmpty) return 'Ingresar nombre';
-              if(!RegExp(r'^[A-Za-z ]+$').hasMatch(value)) return 'Solo se permiten letras';
-              return null;
+              registerProvider.validateName();
             },
           ),
           CustomTextFormField(
             hint: 'Apellidos',
+            errorText: registerProvider.lastNameError,
             icon: Icon(Icons.person),
             onChanged: (value){
               registerProvider.lastName = value;
-            },
-            validator: (value) {
-              if(value == null || value.isEmpty) return 'Ingresar apellidos';
-              if(!RegExp(r'^[A-Za-z ]+$').hasMatch(value)) return 'Solo se permiten letras';
-              return null;
+              registerProvider.validateLastName();
             },
           ),
           CustomTextFormField(
             hint: 'Teléfono',
+            errorText: registerProvider.phoneError,
             icon: Icon(Icons.phone_outlined),
             onChanged: (value){
               registerProvider.phone = value;
-            },
-            validator: (value) {
-              if(value == null || value.trim().isEmpty) return 'Ingresar teléfono';
-              final cleanedValue = value.replaceAll(RegExp(r'[\s-]'), '');
-              if(!RegExp(r'^(\+52|52|0)?(1)?[1-9][0-9]{9}$').hasMatch(cleanedValue)) return 'Ingresa un número váldo';
-              return null;
+              registerProvider.phoneErrorApi = null;
+              registerProvider.validatePhone();
             },
           ),
           CustomTextFormField(
             hint: 'Correo electrónico',
+            errorText: registerProvider.emailError,
             icon: Icon(Icons.email_outlined),
             onChanged: (value){
               registerProvider.email = value;
-            },
-            validator: (value) {
-              if(value == null || value.isEmpty) return 'Ingresar correo electrónico';
-              if(!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Formato de correo electrónico no válido';
-              return null;
+              registerProvider.emailErrorApi = null;
+              registerProvider.validateEmail();
             },
           ),
           CustomTextFormField(
             hint: 'Contraseña',
+            errorText: registerProvider.passwordError,
             icon: Icon(Icons.lock_outline),
             onChanged: (value){
               registerProvider.password = value;
-            },
-            validator: (value) {
-              if(value == null || value.isEmpty) return 'Ingresar contraseña';
-              if(value.length < 8) return 'Ingresa una contraseña de al menos 8 caracteres';
-              if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$').hasMatch(value)) return 'Ingresa una contraseña con al menos una minúscula, una mayúscula y un número';
-              return null;
+              registerProvider.passwordErrorApi = null;
+              registerProvider.validatePassword();
             },
 
           ),
           CustomTextFormField(
             hint: 'Confirmar contraseña',
+            errorText: registerProvider.confirmPasswordError,
             icon: Icon(Icons.lock),
             onChanged: (value){
               registerProvider.confirmPassword = value;
-            },
-            validator: (value) {
-              if(value == null || value.isEmpty)  return 'Confirmar contraseña';
-              if(value != registerProvider.password) return 'Contraseñas no coinciden';
-              return null;
+              registerProvider.validateConfirmPassword();
             },
           ),
           SizedBox(height: 10),
@@ -140,7 +122,10 @@ class _RegisterFormState extends State<_RegisterForm>{
                 option2: "Vendedor",
               );
               if (result != null) {
-                registerProvider.setRole(result);
+                registerProvider.role = result;
+                registerProvider.validateRole();
+              } else {
+                registerProvider.validateRole();
               }
             },
             child: const Text("Selecciona un rol"),
@@ -154,15 +139,27 @@ class _RegisterFormState extends State<_RegisterForm>{
           SizedBox(height: 50),
           CustomElevatedButton(
             onPressed: () async {
-              if(registerProvider.validateUser()){
-                registerProvider.saveUser();
+              bool validated = true;
+              if(!registerProvider.validateAllFields()){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error en los datos')),
+                );
+              } else{
                 try{
-                  await registerProvider.register(registerProvider.user!);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Cuenta creada: ${registerProvider.user?.name ?? ''}')),
-                  );
-                  context.goNamed('login');
+                  validated = await registerProvider.validateUser();
+                  if(validated){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Cuenta creada: ${registerProvider.user?.name ?? ''}')),
+                    );
+                    registerProvider.cleanAll;
+                    context.goNamed('login');
+                  } else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error en los datos')),
+                    );
+                  }
                 } catch (e) {
+                  print("error capturado: $e");
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Error al crear cuenta: $e')),
                   );
@@ -174,7 +171,7 @@ class _RegisterFormState extends State<_RegisterForm>{
           SizedBox(height: 15),
           CustomElevatedButton(
             onPressed: (){
-              registerProvider.roleError = null;
+              registerProvider.cleanAll();
               context.goNamed('login');
             },
             text: 'Regresar',
