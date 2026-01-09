@@ -4,7 +4,7 @@ import 'package:marketplace/presentation/screens/screens.dart';
 final appRouter = GoRouter(
   routes: [
     GoRoute(
-      path: '/',
+      path: '/login',
       name: 'login',
       builder: (context, state) => const LoginScreen(),
 
@@ -23,6 +23,11 @@ final appRouter = GoRouter(
       path: '/product_form',
       name: 'ProductForm',
       builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
+    ),
+    GoRoute(
+      path: '/',
+      name: 'ProductDetails',
+      builder: (context, state) => const ProductDetailsScreen(),
     ),
   ]
 );
