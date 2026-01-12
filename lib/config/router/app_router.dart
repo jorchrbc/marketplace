@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:marketplace/presentation/screens/product_form.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
@@ -6,7 +7,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/',
       name: 'login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const ProductRegist(),
 
     ),
     GoRoute(
@@ -19,10 +20,11 @@ final appRouter = GoRouter(
       name: 'home',
       builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
     ),
-    GoRoute(
+   /* GoRoute(
       path: '/product_form',
       name: 'ProductForm',
       builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
     ),
+    */
   ]
 );

@@ -1,5 +1,5 @@
+import 'package:marketplace/domain/entities/entities.dart';
 import 'package:marketplace/domain/repositories/auth_repository.dart';
-import 'package:marketplace/domain/entities/user.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
 
 class AuthRepositoryImpl extends AuthRepository{
@@ -20,4 +20,10 @@ class AuthRepositoryImpl extends AuthRepository{
   Future<void> logoutUser() {
     return datasource.logoutUser();
   }
+  
+  @override
+  Future<void> registerProduct(Product product) {
+    return datasource.registerProduct(product);
+  }
+  
 }

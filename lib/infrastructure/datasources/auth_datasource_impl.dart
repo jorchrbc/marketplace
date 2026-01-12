@@ -1,6 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
-import 'package:marketplace/domain/entities/user.dart';
+import 'package:marketplace/domain/entities/entities.dart';
 import 'package:marketplace/infrastructure/graphql/mutations.dart';
 class AuthDatasourceImpl implements AuthDatasource {
   final HttpLink httpLink;
@@ -13,6 +13,21 @@ class AuthDatasourceImpl implements AuthDatasource {
         cache: GraphQLCache(),
       );
     }
+
+  @override
+  Future<void> registerProduct(Product product) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(logoutMutation),
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
+  }
+
+  
 
   @override
   Future<void> registerUser(User user) async {
@@ -69,4 +84,6 @@ class AuthDatasourceImpl implements AuthDatasource {
       throw Exception(result.exception.toString());
     }
   }
+
+  
 }
