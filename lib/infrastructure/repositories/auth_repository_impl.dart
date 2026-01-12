@@ -7,7 +7,7 @@ class AuthRepositoryImpl extends AuthRepository{
   AuthRepositoryImpl({required this.datasource});
 
   @override
-  Future<void> registerUser(User user) {
+  Future<Map<String,dynamic>> registerUser(User user) {
     return datasource.registerUser(user);
   }
 
