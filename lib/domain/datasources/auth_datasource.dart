@@ -1,4 +1,4 @@
-import 'package:marketplace/domain/entities/entities.dart';
+import 'package:marketplace/domain/entities/user.dart';
 
 abstract class AuthDatasource{
   Future<Map<String,dynamic>> registerUser(User user);

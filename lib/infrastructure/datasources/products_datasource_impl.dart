@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/products_datasource.dart';
-import 'package:marketplace/infrastructure/graphql/mutations.dart';
+import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
+import 'package:marketplace/domain/entities/product.dart';
 
 class ProductsDatasourceImpl implements ProductsDatasource {
   final HttpLink httpLink;
@@ -15,8 +16,17 @@ class ProductsDatasourceImpl implements ProductsDatasource {
         cache: GraphQLCache(),
       );
     }
+    
+  @override
+  Future<void> createProduct(Product product) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(createNewProduct),
+    );
 
-    Future<void> createProduct() async {
-      // TODO: Implement code
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
     }
+  }
 }
