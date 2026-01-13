@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
 import 'package:marketplace/domain/entities/user.dart';
-import 'package:marketplace/infrastructure/graphql/mutations.dart';
+import 'package:marketplace/infrastructure/graphql/auth_mutations.dart';
 class AuthDatasourceImpl implements AuthDatasource {
   final HttpLink httpLink;
   late final GraphQLClient client;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/presentation/widgets/product/custom_textfield.dart';
-import 'package:marketplace/config/provider/ProductForm_Provider.dart';
+import 'package:marketplace/presentation/widgets/create_product/create_product_widgets.dart';
+import 'package:marketplace/presentation/providers/products_provider.dart';
 
 
 
