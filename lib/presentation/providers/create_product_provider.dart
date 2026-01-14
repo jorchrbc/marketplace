@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:marketplace/domain/repositories/products_repository.dart';
 import 'package:marketplace/domain/entities/product.dart';
 

@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:graphql_flutter/graphql_flutter.dart';
-
 import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
