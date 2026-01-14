@@ -1,20 +1,14 @@
+import 'dart:io';
+
 class Product{
   final String name;
-  final String price;
-  final String? imagePath;
+  final double price;
+  final File? imageFile;
 
 
   Product({
     required this.name,
     required this.price,
-    required this.imagePath,
+    this.imageFile,
   });
-
-  Map<String, dynamic> toMap(){
-    return {
-      "name": name,
-      "price": price,
-      "image": imagePath,
-    };
-  }
 }

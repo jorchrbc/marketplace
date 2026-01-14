@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:marketplace/presentation/widgets/create_product/create_product_widgets.dart';
-import 'package:marketplace/presentation/providers/products_provider.dart';
-
-
+import 'package:marketplace/presentation/providers/create_product_provider.dart';
 
 class ProductForm extends StatefulWidget {
   const ProductForm({super.key});
@@ -55,6 +55,7 @@ class _ProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createProductProvider = Provider.of<CreateProductProvider>(context);
     final size = MediaQuery.of(context).size;
     return Form(
       child: Column(
@@ -78,14 +79,14 @@ class _ProductForm extends StatelessWidget {
 
           CustomTextfield(
             label: 'Nombre del producto',
-            onChanged: (value) => FormProvider().name = value,
+            onChanged: (value) => createProductProvider.name = value,
           ),
 
           const SizedBox(height: 20),
 
           CustomTextfield(
             label: 'Precio',
-            onChanged: (value) => FormProvider().price = value,
+            onChanged: (value) => createProductProvider.price = value,
             validator: (value) {
               if(value == null || value.trim().isEmpty) return 'Ingresar precio';
               final cleanedValue = value.trim();
@@ -97,16 +98,16 @@ class _ProductForm extends StatelessWidget {
           SizedBox(height: 40),
 
              GestureDetector(
-              onTap: () => FormProvider().pickImage(),
+              onTap: () => createProductProvider.pickImage(),
               child: Container(
                 height: 150,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                 ),
-                child: FormProvider().image == null
+                child: createProductProvider.image == null
                     ? const Center(child: Text('Seleccionar imagen'))
-                    : Image.file(FormProvider().image!, fit: BoxFit.cover),
+                    : Image.file(createProductProvider.image!, fit: BoxFit.cover),
               ),
             ),
 
@@ -124,7 +125,7 @@ class _ProductForm extends StatelessWidget {
           ElevatedButton(
           onPressed: () async {
             try{
-             await FormProvider().submitForm();
+             await createProductProvider.submitForm();
              ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Enviado correctamente'))
              );  
