@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/widgets/register/roledialog.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,10 +21,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkAxWY4CUFGxZo0Cbrq24uMTUIViorzA8Pg&s"),
-            Text("Somos Frontend!")
+            SizedBox(height: 10),
+            TextButton(
+              child: Text("Crear producto"),
+              onPressed: (){
+                context.goNamed('create-product');
+              }
+            ),
           ]
-        )
-      )
+        ),
+      ),
     );
       
   }

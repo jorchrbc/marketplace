@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:marketplace/presentation/providers/login_provider.dart';
-import 'package:marketplace/presentation/providers/register_provider.dart';
-import 'package:marketplace/domain/repositories/auth_repository.dart';
-import 'package:marketplace/infrastructure/datasources/auth_datasource_impl.dart';
-import 'package:marketplace/infrastructure/repositories/auth_repository_impl.dart';
-import 'package:marketplace/domain/repositories/products_repository.dart';
-import 'package:marketplace/infrastructure/datasources/products_datasource_impl.dart';
-import 'package:marketplace/infrastructure/repositories/products_repository_impl.dart';
 import 'package:marketplace/config/router/app_router.dart';
 
+import 'package:marketplace/domain/repositories/auth_repository.dart';
+import 'package:marketplace/domain/repositories/products_repository.dart';
 
+import 'package:marketplace/infrastructure/datasources/auth_datasource_impl.dart';
+import 'package:marketplace/infrastructure/datasources/products_datasource_impl.dart';
 
+import 'package:marketplace/infrastructure/repositories/auth_repository_impl.dart';
+import 'package:marketplace/infrastructure/repositories/products_repository_impl.dart';
+
+import 'package:marketplace/presentation/providers/providers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,6 +38,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => LoginProvider(
             authRepository: context.read<AuthRepository>(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CreateProductProvider(
+            productsRepository: context.read<ProductsRepository>(),
           ),
         ),
       ],

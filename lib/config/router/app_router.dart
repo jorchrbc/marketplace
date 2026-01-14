@@ -20,8 +20,8 @@ final appRouter = GoRouter(
       builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
     ),
     GoRoute(
-      path: '/product',
-      name: 'ProductForm',
+      path: '/create-product',
+      name: 'create-product',
       builder: (context, state) => const ProductForm(),
     ),
   ]

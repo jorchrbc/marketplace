@@ -5,17 +5,16 @@ import 'package:marketplace/domain/datasources/auth_datasource.dart';
 import 'package:marketplace/domain/entities/user.dart';
 import 'package:marketplace/infrastructure/graphql/auth_mutations.dart';
 class AuthDatasourceImpl implements AuthDatasource {
-  final HttpLink httpLink;
   late final GraphQLClient client;
 
-  AuthDatasourceImpl()
-    : httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql') {
-      client = GraphQLClient(
+  AuthDatasourceImpl(){
+    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    client = GraphQLClient(
         link: httpLink,
         cache: GraphQLCache(),
       );
-    }
-
+  }
+  
   @override
   Future<Map<String,dynamic>> registerUser(User user) async {
     try{
