@@ -8,6 +8,7 @@ import 'package:marketplace/domain/repositories/products_repository.dart';
 
 import 'package:marketplace/infrastructure/datasources/auth_datasource_impl.dart';
 import 'package:marketplace/infrastructure/datasources/products_datasource_impl.dart';
+import 'package:marketplace/infrastructure/services/token_storage_impl.dart';
 
 import 'package:marketplace/infrastructure/repositories/auth_repository_impl.dart';
 import 'package:marketplace/infrastructure/repositories/products_repository_impl.dart';
@@ -22,13 +23,17 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    final tokenStorage = TokenStorageImpl();
     return MultiProvider(
       providers: [
         Provider<AuthRepository>(
-          create: (_) => AuthRepositoryImpl(datasource: AuthDatasourceImpl()),
+          create: (_) => AuthRepositoryImpl(
+            datasource: AuthDatasourceImpl(), tokenStorage: tokenStorage
+          ),
         ),
         Provider<ProductsRepository>(
-          create: (_) => ProductsRepositoryImpl(datasource: ProductsDatasourceImpl()),
+          create: (_) => ProductsRepositoryImpl(datasource: ProductsDatasourceImpl(
+          tokenStorage: tokenStorage)),
         ),
         ChangeNotifierProvider(
           create: (context) => RegisterProvider(

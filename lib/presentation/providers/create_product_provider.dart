@@ -37,5 +37,14 @@ class CreateProductProvider extends ChangeNotifier {
     );
     
     await productsRepository.createProduct(product);
+    
+    clearForm();
+  }
+
+  void clearForm(){
+    name = '';
+    price = '';
+    _image = null;
+    notifyListeners();
   }
 }

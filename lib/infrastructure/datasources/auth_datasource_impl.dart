@@ -62,7 +62,11 @@ class AuthDatasourceImpl implements AuthDatasource {
     final result = await client.mutate(options);
 
     if (result.hasException) {
-      if (result.exception!.graphqlErrors.isNotEmpty) {
+      final exception = result.exception!;
+      if (exception.linkException != null){
+        throw Exception("La conexión es inestable");
+      }
+      if (exception.graphqlErrors.isNotEmpty) {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
       throw Exception(result.exception.toString());
