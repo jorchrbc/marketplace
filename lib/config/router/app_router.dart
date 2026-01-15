@@ -24,5 +24,10 @@ final appRouter = GoRouter(
       name: 'create-product',
       builder: (context, state) => const ProductForm(),
     ),
+    GoRoute(
+      path: '/product-details',
+      name: 'product-details',
+      builder: (context, state) => const ProductDetailsScreen(),
+    ),
   ]
 );

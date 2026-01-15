@@ -9,3 +9,16 @@ const String createNewProduct = r'''
   }
 }
 ''';
+
+const String productDetailsQuery = r'''
+query DetallesProducto($id: ID!){
+  viewProductsById(id: $id) {
+    id
+    name
+    price
+    image_path
+    user_id
+    
+  }
+}
+''';

@@ -50,6 +50,11 @@ class MyApp extends StatelessWidget {
             productsRepository: context.read<ProductsRepository>(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProductDetailsProvider(
+            productsRepository: context.read<ProductsRepository>(),
+          ),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
