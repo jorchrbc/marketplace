@@ -9,7 +9,7 @@ class ProductSwiper extends StatelessWidget{
   Widget build(BuildContext context){
     final colors = Theme.of(context).colorScheme;
     return Swiper(
-      viewportFraction: 0.8,
+      //viewportFraction: 0.8,
       scale: 0.9,
       pagination: SwiperPagination(
         margin: const EdgeInsets.only(top: 20.0),

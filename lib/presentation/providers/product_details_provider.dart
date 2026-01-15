@@ -37,7 +37,7 @@ class ProductDetailsProvider extends ChangeNotifier{
 
     name = details.name;
     price = details.price.toString();
-    seller = details.seller;
+    seller = "Vendedor: ${details.seller}";
     
     image = Image.network(
       details.imagePath!,
@@ -53,7 +53,7 @@ class ProductDetailsProvider extends ChangeNotifier{
       Card(
         child: SizedBox(
           width: double.infinity,
-          height: 200,
+          height: 300,
           child: image
         )
       )

@@ -42,7 +42,7 @@ class ProductDetailsScreen extends StatelessWidget{
           padding: const EdgeInsets.only(bottom: 150, left: 15, right: 15),
           children:[
             SizedBox(
-              height: 300,
+              height: 400,
               width: double.infinity,
               child: ProductSwiper(image_cards: productDetailsProvider.image_cards)
             ),
@@ -50,7 +50,7 @@ class ProductDetailsScreen extends StatelessWidget{
             Text(
               productDetailsProvider.name,
               style: Theme.of(context).textTheme.titleLarge),
-            SizedBox(height: 8),
+            SizedBox(height: 4),
             Text(
               productDetailsProvider.price,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -58,9 +58,15 @@ class ProductDetailsScreen extends StatelessWidget{
                 fontWeight: FontWeight.bold
               )
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 32),
             Text(productDetailsProvider.description,
-              style: Theme.of(context).textTheme.bodyMedium),
+              style: Theme.of(context).textTheme.bodyMedium
+            ),
+            SizedBox(height: 64),
+            Text(
+              productDetailsProvider.seller,
+              style: Theme.of(context).textTheme.bodyLarge
+            ),
           ]
         )
       ),

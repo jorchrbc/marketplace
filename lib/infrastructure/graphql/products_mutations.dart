@@ -16,9 +16,10 @@ query DetallesProducto($id: ID!){
     id
     name
     price
-    image_path
-    user_id
-    
+    image
+    user{
+      name
+    }    
   }
 }
 ''';

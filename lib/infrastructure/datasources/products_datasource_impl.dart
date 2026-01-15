@@ -60,7 +60,6 @@ class ProductsDatasourceImpl implements ProductsDatasource {
 
   @override
   Future<Details> productDetails(String id) async{
-    final String endpoint = "https://rumpless-cooingly-beaulah.ngrok-free.dev";
     final QueryOptions options = QueryOptions(
       document: gql(productDetailsQuery),
       variables: {
@@ -82,8 +81,8 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     Details details = Details(
       name: data['name'],
       price: data['price'],
-      imagePath: "${endpoint}/${data['image_path']}",
-      seller: data['user_id']
+      imagePath: data['image'],
+      seller: data['user']['name']
     );
     
     return details;
