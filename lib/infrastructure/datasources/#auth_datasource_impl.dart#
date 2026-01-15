@@ -69,7 +69,7 @@ class AuthDatasourceImpl implements AuthDatasource {
       if (exception.graphqlErrors.isNotEmpty) {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-      throw Exception(result.exception.toString());
+       throw Exception(result.exception.toString());
     }
 
     final data = result.data?['login'];

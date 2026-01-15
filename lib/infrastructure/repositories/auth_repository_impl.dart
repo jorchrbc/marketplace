@@ -1,10 +1,12 @@
 import 'package:marketplace/domain/repositories/auth_repository.dart';
 import 'package:marketplace/domain/entities/user.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
+import 'package:marketplace/domain/services/token_storage.dart';
 
 class AuthRepositoryImpl extends AuthRepository{
   final AuthDatasource datasource;
-  AuthRepositoryImpl({required this.datasource});
+  final TokenStorage tokenStorage;
+  AuthRepositoryImpl({required this.datasource, required this.tokenStorage});
 
   @override
   Future<Map<String,dynamic>> registerUser(User user) {
@@ -12,8 +14,15 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
-  Future<Map<String, dynamic>> loginUser(String email, String password) {
-    return datasource.loginUser(email, password);
+  Future<Map<String, dynamic>> loginUser(String email, String password) async {
+    final data = await datasource.loginUser(email, password);
+    print("tried login");
+    print("${data}");
+    print("algo");
+    await tokenStorage.saveToken(
+      "${data['token_type']} ${data['access_token']}"
+    );
+    return data;
   }
 
   @override
