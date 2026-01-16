@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:marketplace/presentation/widgets/create_product/create_product_widgets.dart';
@@ -21,6 +22,16 @@ class _ProductFormState extends State<ProductForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Registrar producto"),
+        leading: IconButton(
+          icon: const Icon( Icons.arrow_back ),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          }
+        ),
       ),
       body: const _ProductRegist()
     );
@@ -50,8 +61,30 @@ class _ProductRegist extends StatelessWidget {
   }
 }
 
-class _ProductForm extends StatelessWidget {
+class _ProductForm extends StatefulWidget {
   const _ProductForm();
+
+  @override
+  State<_ProductForm> createState() => _ProductFormStateInternal();
+}
+
+class _ProductFormStateInternal extends State<_ProductForm> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _priceController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _priceController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +112,7 @@ class _ProductForm extends StatelessWidget {
 
           CustomTextfield(
             label: 'Nombre del producto',
+            controller: _nameController,
             onChanged: (value) => createProductProvider.name = value,
           ),
 
@@ -86,6 +120,7 @@ class _ProductForm extends StatelessWidget {
 
           CustomTextfield(
             label: 'Precio',
+            controller: _priceController,
             onChanged: (value) => createProductProvider.price = value,
             validator: (value) {
               if(value == null || value.trim().isEmpty) return 'Ingresar precio';
@@ -126,14 +161,24 @@ class _ProductForm extends StatelessWidget {
           onPressed: () async {
             try{
              await createProductProvider.submitForm();
-             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Enviado correctamente'))
-             );  
+             // Limpiar campos form
+             _nameController.clear();
+             _priceController.clear();
+             // Limpiar provider state
+             createProductProvider.clearForm();
+
+             if (mounted) {
+               ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Enviado correctamente'))
+               );
+             }
             }
             catch (e){
-               ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text(e.toString()))
-               );
+              if (mounted) {
+                 ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(content: Text(e.toString()))
+                 );
+              }
             }
           } ,
            child: const Text("Guardar"),
@@ -143,6 +188,4 @@ class _ProductForm extends StatelessWidget {
       ),
     );
   }
-
-
-  }
+}

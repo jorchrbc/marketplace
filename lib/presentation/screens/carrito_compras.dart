@@ -249,7 +249,7 @@ class _CartItem extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                         context.read<CartProvider>().incrementQuantity(item.productId, item.quantity);
+                         context.read<CartProvider>().incrementQuantity(item.id, item.quantity);
                       },
                       child: _QuantityButton(
                         icon: Icons.add,
@@ -268,7 +268,7 @@ class _CartItem extends StatelessWidget {
                     const SizedBox(width: 15),
                     InkWell(
                       onTap: () {
-                        context.read<CartProvider>().decrementQuantity(item.productId, item.quantity);
+                        context.read<CartProvider>().decrementQuantity(item.id, item.quantity);
                       },
                       child: _QuantityButton(
                         icon: Icons.remove,

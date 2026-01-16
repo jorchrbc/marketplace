@@ -39,3 +39,48 @@ query carrito {
   }
 }
 ''';
+
+const String removeFromCartMutation = r'''
+mutation Delete($cart_item_id: ID!) {
+  removeFromCart(cart_item_id: $cart_item_id) {
+    id
+    items {
+      id
+      quantity
+      product {
+        id
+        name
+        price
+      }
+    }
+    subtotal
+    taxes
+    shipping
+    total
+  }
+}
+''';
+
+const String updateCartItemMutation = r'''
+mutation Update($cart_item_id: ID!, $quantity: Int!) {
+  updateCartItem(
+    cart_item_id: $cart_item_id
+    quantity: $quantity
+  ) {
+    id
+    items {
+      id
+      quantity
+      product {
+        id
+        name
+        price
+      }
+    }
+    subtotal
+    taxes
+    shipping
+    total
+  }
+}
+''';
