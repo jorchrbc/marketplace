@@ -161,7 +161,7 @@ class _RegisterFormState extends State<_RegisterForm>{
                 } catch (e) {
                   print("error capturado: $e");
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error al crear cuenta: $e')),
+                    SnackBar(content: Text('$e')),
                   );
                 }
               }
