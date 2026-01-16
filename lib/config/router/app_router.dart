@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
@@ -28,6 +29,11 @@ final appRouter = GoRouter(
       path: '/product-details',
       name: 'product-details',
       builder: (context, state) => const ProductDetailsScreen(),
+    ),
+    GoRouter(
+      path: '/cart',
+      name: 'cart',
+      builder: (context, state) => const CarritoComprasScreen(),
     ),
   ]
 );

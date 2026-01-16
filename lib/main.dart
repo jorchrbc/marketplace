@@ -5,6 +5,7 @@ import 'package:marketplace/config/router/app_router.dart';
 
 import 'package:marketplace/domain/repositories/auth_repository.dart';
 import 'package:marketplace/domain/repositories/products_repository.dart';
+import 'package:marketplace/domain/repositories/cart_repository.dart';
 
 import 'package:marketplace/infrastructure/datasources/auth_datasource_impl.dart';
 import 'package:marketplace/infrastructure/datasources/products_datasource_impl.dart';
@@ -13,6 +14,8 @@ import 'package:marketplace/infrastructure/services/token_storage_impl.dart';
 import 'package:marketplace/infrastructure/repositories/auth_repository_impl.dart';
 import 'package:marketplace/infrastructure/repositories/products_repository_impl.dart';
 
+import 'package:marketplace/infrastructure/datasources/cart_datasource_impl.dart';
+import 'package:marketplace/infrastructure/repositories/cart_repository_impl.dart';
 import 'package:marketplace/presentation/providers/providers.dart';
 
 void main() {
@@ -35,6 +38,11 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductsRepositoryImpl(datasource: ProductsDatasourceImpl(
           tokenStorage: tokenStorage)),
         ),
+        Provider<CartRepository>(
+           create: (_) => CartRepositoryImpl(
+             datasource: CartDatasourceImpl(tokenStorage: tokenStorage)
+           )
+        ),
         ChangeNotifierProvider(
           create: (context) => RegisterProvider(
             authRepository: context.read<AuthRepository>(),
@@ -53,6 +61,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProductDetailsProvider(
             productsRepository: context.read<ProductsRepository>(),
+        )
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(
+            cartRepository: context.read<CartRepository>()
           ),
         ),
       ],
