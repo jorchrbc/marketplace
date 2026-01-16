@@ -4,6 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
+import 'package:marketplace/domain/entities/details.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 
 class ProductsDatasourceImpl implements ProductsDatasource {
@@ -55,5 +56,35 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       }
     }
     print('Producto creado: ${result.data?["createProduct"]}');
+  }
+
+  @override
+  Future<Details> productDetails(String id) async{
+    final QueryOptions options = QueryOptions(
+      document: gql(productDetailsQuery),
+      variables: {
+        'id': id
+      }
+    );
+    final result = await client.query(options);
+    if (result.hasException) {
+      final exception = result.exception!;
+      if(exception.linkException != null){
+        throw Exception("La conexión es inestable.");
+      }
+      if(exception.graphqlErrors.isNotEmpty){
+        final error = exception.graphqlErrors.first;
+        throw Exception(error.message);
+      }
+    }
+    final data = result.data?['viewProductsById'];
+    Details details = Details(
+      name: data['name'],
+      price: data['price'],
+      imagePath: data['image'],
+      seller: data['user']['name']
+    );
+    
+    return details;
   }
 }
