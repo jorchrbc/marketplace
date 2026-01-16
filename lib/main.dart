@@ -61,7 +61,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProductDetailsProvider(
             productsRepository: context.read<ProductsRepository>(),
-        )
+          ),
+        ),
         ChangeNotifierProvider(
           create: (context) => CartProvider(
             cartRepository: context.read<CartRepository>()
