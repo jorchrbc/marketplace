@@ -4,7 +4,7 @@ const String createNewProduct = r'''
     id
     name
     price
-    image_path
+    image
     created_at
   }
 }
