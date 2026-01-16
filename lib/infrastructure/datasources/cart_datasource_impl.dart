@@ -68,4 +68,49 @@ class CartDatasourceImpl implements CartDatasource {
     }
     return null;
   }
+
+  @override
+  Future<Cart?> removeFromCart(String cartItemId) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(removeFromCartMutation),
+      variables: {
+        'cart_item_id': cartItemId,
+      },
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      print('Error removing from cart: ${result.exception}');
+      return null;
+    }
+
+    if (result.data != null && result.data!['removeFromCart'] != null) {
+      return Cart.fromJson(result.data!['removeFromCart']);
+    }
+    return null;
+  }
+
+  @override
+  Future<Cart?> updateCartItem(String cartItemId, int quantity) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(updateCartItemMutation),
+      variables: {
+        'cart_item_id': cartItemId,
+        'quantity': quantity,
+      },
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      print('Error updating cart item: ${result.exception}');
+      return null;
+    }
+
+    if (result.data != null && result.data!['updateCartItem'] != null) {
+      return Cart.fromJson(result.data!['updateCartItem']);
+    }
+    return null;
+  }
 }

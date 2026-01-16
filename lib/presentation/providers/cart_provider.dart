@@ -38,7 +38,7 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _modifyItem(String productId, int quantity) async {
+  Future<void> addItem(String productId, int quantity) async {
       _isLoading = true;
       notifyListeners();
 
@@ -46,40 +46,50 @@ class CartProvider extends ChangeNotifier {
         final cart = await cartRepository.addToCart(productId, quantity);
         _updateCartData(cart);
       } catch (e) {
-        print("Error modifying item: $e");
+        print("Error adding item: $e");
       } finally {
         _isLoading = false;
         notifyListeners();
       }
   }
 
-  Future<void> addItem(String productId, int quantity) async {
-    await _modifyItem(productId, quantity);
+  Future<void> incrementQuantity(String cartItemId, int currentQuantity) async {
+    await _updateCartItem(cartItemId, currentQuantity + 1);
   }
 
-  Future<void> incrementQuantity(String productId, int currentQuantity) async {
-    // Asumimos que el backend es aditivo (suma la cantidad enviada)
-    await addItem(productId, 1);
-  }
-
-  Future<void> decrementQuantity(String productId, int currentQuantity) async {
+  Future<void> decrementQuantity(String cartItemId, int currentQuantity) async {
     if (currentQuantity > 1) {
-       // Enviamos -1 para restar 1
-       await addItem(productId, -1);
-    } else {
-       // Opcional: Manejar eliminación si llega a 0
+       await _updateCartItem(cartItemId, currentQuantity - 1);
     }
   }
 
-  Future<void> removeItem(String itemId) async {
-      final index = _items.indexWhere((item) => item.id == itemId);
-      if(index == -1) return;
-      
-      final productId = _items[index].productId;
-      final currentQuantity = _items[index].quantity;
-      
-      // Restamos toda la cantidad actual para eliminarlo
-      await addItem(productId, -currentQuantity);
+  Future<void> _updateCartItem(String cartItemId, int quantity) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final cart = await cartRepository.updateCartItem(cartItemId, quantity);
+       _updateCartData(cart);
+    } catch (e) {
+      print('Error updating item: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  Future<void> removeItem(String cartItemId) async {
+      _isLoading = true;
+      notifyListeners();
+      try {
+        final cart = await cartRepository.removeFromCart(cartItemId);
+        _updateCartData(cart);
+      } catch (e) {
+        print("Error removing item: $e");
+      } finally {
+        _isLoading = false;
+        notifyListeners();
+      }
   }
 
   void _updateCartData(Cart? cart) {

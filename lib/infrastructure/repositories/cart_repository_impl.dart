@@ -16,4 +16,14 @@ class CartRepositoryImpl implements CartRepository {
   Future<Cart?> addToCart(String productId, int quantity) {
     return datasource.addToCart(productId, quantity);
   }
+
+  @override
+  Future<Cart?> removeFromCart(String cartItemId) {
+    return datasource.removeFromCart(cartItemId);
+  }
+
+  @override
+  Future<Cart?> updateCartItem(String cartItemId, int quantity) {
+    return datasource.updateCartItem(cartItemId, quantity);
+  }
 }

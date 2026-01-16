@@ -43,19 +43,24 @@ class ProductsDatasourceImpl implements ProductsDatasource {
           : null,
       }
     );
-    final result = await client.mutate(options);
-    if (result.hasException) {
-      final exception = result.exception!;
-      if(exception.linkException != null){
-        print('Network error: ${exception.linkException}');
-        throw Exception("La conexión es inestable.");
+    try {
+      final result = await client.mutate(options).timeout(const Duration(seconds: 60));
+      
+      if (result.hasException) {
+        final exception = result.exception!;
+        if(exception.linkException != null){
+          print('Network error: ${exception.linkException}');
+          throw Exception("La conexión es inestable.");
+        }
+        if(exception.graphqlErrors.isNotEmpty){
+          final error = exception.graphqlErrors.first;
+          throw Exception(error.message);
+        }
       }
-      if(exception.graphqlErrors.isNotEmpty){
-        final error = exception.graphqlErrors.first;
-        throw Exception(error.message);
-      }
+      print('Producto creado: ${result.data?["createProduct"]}');
+    } on TimeoutException {
+       throw Exception("La petición tardó demasiado en responder.");
     }
-    print('Producto creado: ${result.data?["createProduct"]}');
   }
 
   @override
