@@ -26,7 +26,7 @@ class AuthDatasourceImpl implements AuthDatasource {
 
       final result = await client
         .mutate(options)
-        .timeout(const Duration(seconds: 12));
+        .timeout(const Duration(seconds: 6));
 
 
       if(result.hasException){

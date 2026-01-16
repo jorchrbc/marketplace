@@ -123,7 +123,6 @@ class RegisterProvider extends ChangeNotifier{
       passwordErrorApi = "Contraseña inválida";
     }else{passwordErrorApi = null;}
     if(validateAllFields()){
-      cleanAll();
       return true;
     }
     return false;
