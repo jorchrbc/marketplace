@@ -6,6 +6,7 @@ class CustomTextfield extends StatelessWidget {
   final String? errorMessage;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
   const CustomTextfield({
     super.key, 
@@ -13,7 +14,8 @@ class CustomTextfield extends StatelessWidget {
     this.hint, 
     this.errorMessage, 
     this.onChanged, 
-    this.validator}
+    this.validator,
+    this.controller}
     );
 
   @override
@@ -26,6 +28,7 @@ class CustomTextfield extends StatelessWidget {
       borderRadius: BorderRadius.circular(50)
     );
     return TextFormField(
+      controller: controller,
       onChanged: onChanged,
       
       validator: validator,

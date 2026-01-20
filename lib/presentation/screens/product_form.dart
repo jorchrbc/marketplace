@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
 import 'package:marketplace/presentation/widgets/create_product/create_product_widgets.dart';
-import 'package:marketplace/presentation/providers/products_provider.dart';
-
-
+import 'package:marketplace/presentation/providers/create_product_provider.dart';
 
 class ProductForm extends StatefulWidget {
   const ProductForm({super.key});
@@ -21,6 +22,16 @@ class _ProductFormState extends State<ProductForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Registrar producto"),
+        leading: IconButton(
+          icon: const Icon( Icons.arrow_back ),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          }
+        ),
       ),
       body: const _ProductRegist()
     );
@@ -50,11 +61,34 @@ class _ProductRegist extends StatelessWidget {
   }
 }
 
-class _ProductForm extends StatelessWidget {
+class _ProductForm extends StatefulWidget {
   const _ProductForm();
 
   @override
+  State<_ProductForm> createState() => _ProductFormStateInternal();
+}
+
+class _ProductFormStateInternal extends State<_ProductForm> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _priceController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _priceController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final createProductProvider = Provider.of<CreateProductProvider>(context);
     final size = MediaQuery.of(context).size;
     return Form(
       child: Column(
@@ -78,14 +112,16 @@ class _ProductForm extends StatelessWidget {
 
           CustomTextfield(
             label: 'Nombre del producto',
-            onChanged: (value) => FormProvider().name = value,
+            controller: _nameController,
+            onChanged: (value) => createProductProvider.name = value,
           ),
 
           const SizedBox(height: 20),
 
           CustomTextfield(
             label: 'Precio',
-            onChanged: (value) => FormProvider().price = value,
+            controller: _priceController,
+            onChanged: (value) => createProductProvider.price = value,
             validator: (value) {
               if(value == null || value.trim().isEmpty) return 'Ingresar precio';
               final cleanedValue = value.trim();
@@ -97,16 +133,16 @@ class _ProductForm extends StatelessWidget {
           SizedBox(height: 40),
 
              GestureDetector(
-              onTap: () => FormProvider().pickImage(),
+              onTap: () => createProductProvider.pickImage(),
               child: Container(
                 height: 150,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                 ),
-                child: FormProvider().image == null
+                child: createProductProvider.image == null
                     ? const Center(child: Text('Seleccionar imagen'))
-                    : Image.file(FormProvider().image!, fit: BoxFit.cover),
+                    : Image.file(createProductProvider.image!, fit: BoxFit.cover),
               ),
             ),
 
@@ -124,15 +160,25 @@ class _ProductForm extends StatelessWidget {
           ElevatedButton(
           onPressed: () async {
             try{
-             await FormProvider().submitForm();
-             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Enviado correctamente'))
-             );  
+             await createProductProvider.submitForm();
+             // Limpiar campos form
+             _nameController.clear();
+             _priceController.clear();
+             // Limpiar provider state
+             createProductProvider.clearForm();
+
+             if (mounted) {
+               ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Enviado correctamente'))
+               );
+             }
             }
             catch (e){
-               ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text(e.toString()))
-               );
+              if (mounted) {
+                 ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(content: Text(e.toString()))
+                 );
+              }
             }
           } ,
            child: const Text("Guardar"),
@@ -142,6 +188,4 @@ class _ProductForm extends StatelessWidget {
       ),
     );
   }
-
-
-  }
+}

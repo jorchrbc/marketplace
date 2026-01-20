@@ -3,8 +3,23 @@ import 'package:marketplace/presentation/providers/cart_provider.dart';
 import 'package:marketplace/domain/entities/cart_item.dart';
 import 'package:provider/provider.dart';
 
-class CarritoComprasScreen extends StatelessWidget {
+class CarritoComprasScreen extends StatefulWidget {
   const CarritoComprasScreen({super.key});
+
+  @override
+  State<CarritoComprasScreen> createState() => _CarritoComprasScreenState();
+}
+
+class _CarritoComprasScreenState extends State<CarritoComprasScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    // Cargar el carrito al iniciar la pantalla
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CartProvider>().loadCart();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +40,11 @@ class CarritoComprasScreen extends StatelessWidget {
       ),
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
+          
+          if (cartProvider.isLoading) {
+             return const Center(child: CircularProgressIndicator());
+          }
+
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -46,6 +66,7 @@ class CarritoComprasScreen extends StatelessWidget {
                   )),
 
                   if (cartProvider.items.isNotEmpty) ...[
+
                     const SizedBox(height: 10),
                     const Divider(color: Colors.grey, thickness: 0.5),
                     const SizedBox(height: 10),
@@ -54,6 +75,11 @@ class CarritoComprasScreen extends StatelessWidget {
                     _SummaryRow(
                       label: "Sub Total", 
                       amount: "\$${cartProvider.subTotal.toStringAsFixed(2)}"
+                    ),
+                    const SizedBox(height: 10),
+                    _SummaryRow(
+                      label: "Envío", 
+                      amount: "\$${cartProvider.shipping.toStringAsFixed(2)}"
                     ),
                     const SizedBox(height: 10),
                     _SummaryRow(
@@ -223,7 +249,7 @@ class _CartItem extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                         context.read<CartProvider>().incrementQuantity(item.id);
+                         context.read<CartProvider>().incrementQuantity(item.id, item.quantity);
                       },
                       child: _QuantityButton(
                         icon: Icons.add,
@@ -242,7 +268,7 @@ class _CartItem extends StatelessWidget {
                     const SizedBox(width: 15),
                     InkWell(
                       onTap: () {
-                        context.read<CartProvider>().decrementQuantity(item.id);
+                        context.read<CartProvider>().decrementQuantity(item.id, item.quantity);
                       },
                       child: _QuantityButton(
                         icon: Icons.remove,

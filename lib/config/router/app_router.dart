@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
@@ -20,9 +21,19 @@ final appRouter = GoRouter(
       builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
     ),
     GoRoute(
-      path: '/product',
-      name: 'ProductForm',
+      path: '/create-product',
+      name: 'create-product',
       builder: (context, state) => const ProductForm(),
+    ),
+    GoRoute(
+      path: '/product-details',
+      name: 'product-details',
+      builder: (context, state) => const ProductDetailsScreen(),
+    ),
+    GoRoute(
+      path: '/cart',
+      name: 'cart',
+      builder: (context, state) => const CarritoComprasScreen(),
     ),
   ]
 );

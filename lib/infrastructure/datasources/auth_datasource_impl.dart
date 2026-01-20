@@ -5,17 +5,17 @@ import 'package:marketplace/domain/datasources/auth_datasource.dart';
 import 'package:marketplace/domain/entities/user.dart';
 import 'package:marketplace/infrastructure/graphql/auth_mutations.dart';
 class AuthDatasourceImpl implements AuthDatasource {
-  final HttpLink httpLink;
   late final GraphQLClient client;
 
-  AuthDatasourceImpl()
-    : httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql') {
-      client = GraphQLClient(
+  AuthDatasourceImpl(){
+    // final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    client = GraphQLClient(
         link: httpLink,
         cache: GraphQLCache(),
       );
-    }
-
+  }
+  
   @override
   Future<Map<String,dynamic>> registerUser(User user) async {
     try{
@@ -26,7 +26,7 @@ class AuthDatasourceImpl implements AuthDatasource {
 
       final result = await client
         .mutate(options)
-        .timeout(const Duration(seconds: 12));
+        .timeout(const Duration(seconds: 6));
 
 
       if(result.hasException){
@@ -63,7 +63,11 @@ class AuthDatasourceImpl implements AuthDatasource {
     final result = await client.mutate(options);
 
     if (result.hasException) {
-      if (result.exception!.graphqlErrors.isNotEmpty) {
+      final exception = result.exception!;
+      if (exception.linkException != null){
+        throw Exception("La conexión es inestable");
+      }
+      if (exception.graphqlErrors.isNotEmpty) {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
       throw Exception(result.exception.toString());
