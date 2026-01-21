@@ -249,6 +249,15 @@ class _CartItem extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+                         if (item.quantity >= item.stock) {
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             SnackBar(
+                               content: Text('Solo hay ${item.stock} unidades disponibles de este producto'),
+                               duration: const Duration(seconds: 2),
+                             )
+                           );
+                           return;
+                         }
                          context.read<CartProvider>().incrementQuantity(item.id, item.quantity);
                       },
                       child: _QuantityButton(
