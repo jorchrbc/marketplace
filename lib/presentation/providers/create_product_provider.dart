@@ -35,7 +35,7 @@ class CreateProductProvider extends ChangeNotifier {
       name: name,
       price: double.parse(price),
       imageFile:_image,
-      stock: double.parse(stock)
+      stock: int.parse(stock)
     );
     
     await productsRepository.createProduct(product);

@@ -4,7 +4,7 @@ class Product{
   final String name;
   final double price;
   final File? imageFile;
-  final double stock;
+  final int stock;
 
 
   Product({

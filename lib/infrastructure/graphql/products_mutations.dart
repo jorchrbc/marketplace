@@ -1,6 +1,6 @@
 const String createNewProduct = r'''
-  mutation PublicarProducto($name: String!, $price: Float!,$stock: Float!, $image: Upload) {
-  createProduct(name: $name, price: $price, image: $image) {
+  mutation PublicarProducto($name: String!, $price: Float!,$stock: Int!, $image: Upload) {
+  createProduct(name: $name, price: $price, image: $image, stock: stock) {
     id
     name
     price

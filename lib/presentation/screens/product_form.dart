@@ -71,18 +71,21 @@ class _ProductForm extends StatefulWidget {
 class _ProductFormStateInternal extends State<_ProductForm> {
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
+  late final TextEditingController _stockController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _priceController = TextEditingController();
+    _stockController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
+    _stockController.dispose();
     super.dispose();
   }
 
@@ -132,6 +135,20 @@ class _ProductFormStateInternal extends State<_ProductForm> {
           ),
           SizedBox(height: 40),
 
+           CustomTextfield(
+            label: 'Stock',
+            controller: _stockController,
+            onChanged: (value) => createProductProvider.stock = value,
+            validator: (value) {
+              if(value == null || value.trim().isEmpty) return 'Ingresar cantidad en stock';
+              final cleanedValue = value.trim();
+              final regex = RegExp(r'^\d+(\.\d{1,2})?$');
+              if(!regex.hasMatch(cleanedValue)) return 'Ingresa una cantidad válida';
+              return null;
+            },
+           ),
+
+          SizedBox(height: 40),
              GestureDetector(
               onTap: () => createProductProvider.pickImage(),
               child: Container(
