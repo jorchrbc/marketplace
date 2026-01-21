@@ -34,6 +34,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       variables: {
         'name': product.name,
         'price': product.price,
+        'stock':product.stock,
         'image': product.imageFile != null
           ? await http.MultipartFile.fromBytes(
             'image',
@@ -87,6 +88,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       name: data['name'],
       price: data['price'],
       imagePath: data['image'],
+      stock: data['stock'],
       seller: data['user']['name']
     );
     
