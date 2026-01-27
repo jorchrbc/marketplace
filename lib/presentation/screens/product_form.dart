@@ -72,6 +72,7 @@ class _ProductFormStateInternal extends State<_ProductForm> {
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
   late final TextEditingController _stockController;
+  late final TextEditingController _descripController;
 
   @override
   void initState() {
@@ -79,6 +80,7 @@ class _ProductFormStateInternal extends State<_ProductForm> {
     _nameController = TextEditingController();
     _priceController = TextEditingController();
     _stockController = TextEditingController();
+    _descripController = TextEditingController();
   }
 
   @override
@@ -86,6 +88,7 @@ class _ProductFormStateInternal extends State<_ProductForm> {
     _nameController.dispose();
     _priceController.dispose();
     _stockController.dispose();
+    _descripController.dispose();
     super.dispose();
   }
 
@@ -133,7 +136,7 @@ class _ProductFormStateInternal extends State<_ProductForm> {
               return null;
             },
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 20),
 
            CustomTextfield(
             label: 'Stock',
@@ -147,6 +150,18 @@ class _ProductFormStateInternal extends State<_ProductForm> {
               return null;
             },
            ),
+          SizedBox(height:10),
+          CustomTextfield(
+            label: 'Descripción',
+            mxlines: 4,
+            mnlines: 2,
+            controller: _descripController,
+            onChanged: (value) => createProductProvider.descrip =value,
+            validator: (value) {
+              if(value == null || value.trim().isEmpty) return 'El producto requiere de una descripción';
+              return null;
+            },
+          ),
 
           SizedBox(height: 40),
              GestureDetector(
@@ -164,14 +179,8 @@ class _ProductFormStateInternal extends State<_ProductForm> {
             ),
 
           SizedBox(height: 20),
-          /* ElevatedButton.icon(icon: const Icon(Icons.photo),
-           label: const Text("Agregar imagenes"),
-           onPressed: () async {
-           //final imgs = await pickMul
-           },
-           ),
-            */
-          const SizedBox(height: 30),
+        
+          SizedBox(height: 30),
 
 
           ElevatedButton(
@@ -181,6 +190,8 @@ class _ProductFormStateInternal extends State<_ProductForm> {
              // Limpiar campos form
              _nameController.clear();
              _priceController.clear();
+             _stockController.clear();
+             _descripController.clear();
              // Limpiar provider state
              createProductProvider.clearForm();
 
