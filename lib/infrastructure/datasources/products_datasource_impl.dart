@@ -75,6 +75,41 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     if (result.hasException) {
       final exception = result.exception!;
       if(exception.linkException != null){
+        print('conexion inestable');
+        throw Exception("La conexión es inestable.");
+      }
+      if(exception.graphqlErrors.isNotEmpty){
+        final error = exception.graphqlErrors.first;
+        print('error.message');
+        throw Exception(error.message);
+      }
+    }
+    final data = result.data?['viewProductsById'];
+    Details details = Details(
+      name: data['name'],
+      price: data['price'].toDouble().toString(),
+      imagePath: data['image'],
+      seller: data['user']?['name'] ?? 'Anónimo'
+    );
+    print('hose que pasaaa');
+    print(details);
+    return details;
+  }
+
+  @override
+  Future<List> getProductsToBuy() async{
+    print('buenas tardes');
+    final QueryOptions options = QueryOptions(
+      document: gql(getProductsToBuyQuery),
+      variables: {
+        'first': 10,
+        'page': 1
+      }
+    );
+    final result = await client.query(options);
+    if (result.hasException) {
+      final exception = result.exception!;
+      if(exception.linkException != null){
         throw Exception("La conexión es inestable.");
       }
       if(exception.graphqlErrors.isNotEmpty){
@@ -82,14 +117,18 @@ class ProductsDatasourceImpl implements ProductsDatasource {
         throw Exception(error.message);
       }
     }
-    final data = result.data?['viewProductsById'];
-    Details details = Details(
-      name: data['name'],
-      price: data['price'],
-      imagePath: data['image'],
-      seller: data['user']['name']
-    );
-    
-    return details;
+    final data = result.data?['allProducts']['data'];
+    List<Details> product_details = [];
+    for (var item in data){
+      product_details.add(Details(
+          name: item['name'],
+          price: item['price'].toDouble().toString(),
+          imagePath: item['image'],
+          seller: item['user']?['name'] ?? 'Anónimo',
+          id: item['id']
+        )
+      );
+    }
+    return product_details;
   }
 }

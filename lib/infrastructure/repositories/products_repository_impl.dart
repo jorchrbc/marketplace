@@ -16,4 +16,9 @@ class ProductsRepositoryImpl extends ProductsRepository{
   Future<Details> productDetails(String id) async {
     return await datasource.productDetails(id);
   }
+
+  @override
+  Future<List> getProductsToBuy() async{
+    return datasource.getProductsToBuy();
+  }
 }

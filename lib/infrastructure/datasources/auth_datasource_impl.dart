@@ -87,8 +87,9 @@ class AuthDatasourceImpl implements AuthDatasource {
       document: gql(logoutMutation),
     );
 
-    final result = await client.mutate(options);
-
+    final result = await client
+      .mutate(options)
+      .timeout(const Duration(seconds: 6));
     if (result.hasException) {
       throw Exception(result.exception.toString());
     }

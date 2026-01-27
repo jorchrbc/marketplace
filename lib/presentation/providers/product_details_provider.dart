@@ -19,6 +19,7 @@ class ProductDetailsProvider extends ChangeNotifier{
   ProductDetailsProvider({required this.productsRepository});
 
   void clearAll(){
+    print('hola?');
     name = '';
     price = '';
     seller = '';
@@ -28,12 +29,14 @@ class ProductDetailsProvider extends ChangeNotifier{
     isLoading = false;
     notifyListeners();
   }
-  getProductDetails() async{
+  
+  Future<void> getProductDetails(String id) async{
+    print(id);
     isLoading = true;
     errorMessage = null;
     notifyListeners();
     try{
-    Details details = await productsRepository.productDetails("2");
+    Details details = await productsRepository.productDetails(id);
 
     name = details.name;
     price = details.price.toString();

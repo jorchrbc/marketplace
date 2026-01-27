@@ -68,6 +68,12 @@ class MyApp extends StatelessWidget {
             cartRepository: context.read<CartRepository>()
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(
+            productsRepository: context.read<ProductsRepository>(),
+            authRepository: context.read<AuthRepository>(),
+          ),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
