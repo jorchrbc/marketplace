@@ -7,6 +7,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/',
       name: 'login',
+      //builder: (context, state) => const ProductForm(),
       builder: (context, state) => const LoginScreen(),
 
     ),
@@ -34,6 +35,11 @@ final appRouter = GoRouter(
       path: '/cart',
       name: 'cart',
       builder: (context, state) => const CarritoComprasScreen(),
+    ),
+    GoRoute(
+      path: '/user-profile',
+      name: 'user-profile',
+      builder: (context, state) => const UserprofileScreen(),
     ),
   ]
 );

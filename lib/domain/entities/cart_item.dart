@@ -4,6 +4,7 @@ class CartItem {
   final String name;
   final double price;
   final String imageUrl; 
+  final int stock;
   int quantity;
 
   CartItem({
@@ -12,6 +13,7 @@ class CartItem {
     required this.name,
     required this.price,
     required this.imageUrl,
+    required this.stock,
     this.quantity = 1,
   });
 
@@ -24,6 +26,7 @@ class CartItem {
       productId: product['id'].toString(),
       name: product['name'],
       price: (product['price'] as num).toDouble(),
+      stock: (product['stock'] as num).toInt(),
       quantity: json['quantity'] as int,
       imageUrl: '', // Mapear imagen si viene del backend
     );

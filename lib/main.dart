@@ -68,6 +68,9 @@ class MyApp extends StatelessWidget {
             cartRepository: context.read<CartRepository>()
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => CheckoutProvider(),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

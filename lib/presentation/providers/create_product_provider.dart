@@ -15,6 +15,8 @@ class CreateProductProvider extends ChangeNotifier {
 
   String name = '';
   String price = '';
+  String stock = '';
+  String descrip = '';
 
  
   Future<void> pickImage() async {
@@ -33,7 +35,9 @@ class CreateProductProvider extends ChangeNotifier {
     final product = Product(
       name: name,
       price: double.parse(price),
-      imageFile:_image
+      imageFile:_image,
+      stock: int.parse(stock),
+      dscrp: descrip,
     );
     
     await productsRepository.createProduct(product);
@@ -45,6 +49,8 @@ class CreateProductProvider extends ChangeNotifier {
     name = '';
     price = '';
     _image = null;
+    stock = '';
+    descrip = '';
     notifyListeners();
   }
 }

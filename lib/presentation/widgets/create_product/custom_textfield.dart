@@ -7,6 +7,8 @@ class CustomTextfield extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final int? mxlines;
+  final int? mnlines;
 
   const CustomTextfield({
     super.key, 
@@ -15,7 +17,10 @@ class CustomTextfield extends StatelessWidget {
     this.errorMessage, 
     this.onChanged, 
     this.validator,
-    this.controller}
+    this.controller,
+    this.mnlines,
+    this.mxlines,
+    }
     );
 
   @override
@@ -30,7 +35,9 @@ class CustomTextfield extends StatelessWidget {
     return TextFormField(
       controller: controller,
       onChanged: onChanged,
-      
+      maxLines: mxlines,
+      minLines: mnlines,
+
       validator: validator,
       decoration: InputDecoration(
         enabledBorder: border,

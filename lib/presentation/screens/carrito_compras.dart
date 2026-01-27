@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/presentation/providers/cart_provider.dart';
 import 'package:marketplace/domain/entities/cart_item.dart';
 import 'package:provider/provider.dart';
+import 'package:marketplace/presentation/screens/proceder_pago.dart';
 
 class CarritoComprasScreen extends StatefulWidget {
   const CarritoComprasScreen({super.key});
@@ -115,7 +116,12 @@ class _CarritoComprasScreenState extends State<CarritoComprasScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const ProcederPagoScreen())
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor,
                           padding: const EdgeInsets.symmetric(vertical: 18),
@@ -249,6 +255,15 @@ class _CartItem extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+                         if (item.quantity >= item.stock) {
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             SnackBar(
+                               content: Text('Solo hay ${item.stock} unidades disponibles de este producto'),
+                               duration: const Duration(seconds: 2),
+                             )
+                           );
+                           return;
+                         }
                          context.read<CartProvider>().incrementQuantity(item.id, item.quantity);
                       },
                       child: _QuantityButton(

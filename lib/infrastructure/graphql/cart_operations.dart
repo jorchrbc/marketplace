@@ -9,6 +9,7 @@ mutation addToCart($product_id: ID!, $quantity: Int!) {
         id
         name
         price
+        stock
       }
     }
     subtotal
@@ -29,6 +30,7 @@ query carrito {
         id
         name
         price
+        stock
       }
       quantity
     }
@@ -51,6 +53,7 @@ mutation Delete($cart_item_id: ID!) {
         id
         name
         price
+        stock
       }
     }
     subtotal
@@ -75,6 +78,7 @@ mutation Update($cart_item_id: ID!, $quantity: Int!) {
         id
         name
         price
+        stock
       }
     }
     subtotal
