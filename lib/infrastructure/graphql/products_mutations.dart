@@ -24,3 +24,15 @@ query DetallesProducto($id: ID!){
   }
 }
 ''';
+
+const String myProductsQuery = r'''
+query MisProductos{
+  myProducts {
+    id
+    name
+    price
+    stock
+    image
+  }
+}
+''';

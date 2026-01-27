@@ -16,6 +16,9 @@ import 'package:marketplace/infrastructure/repositories/products_repository_impl
 
 import 'package:marketplace/infrastructure/datasources/cart_datasource_impl.dart';
 import 'package:marketplace/infrastructure/repositories/cart_repository_impl.dart';
+import 'package:marketplace/domain/repositories/order_repository.dart';
+import 'package:marketplace/infrastructure/datasources/order_datasource_impl.dart';
+import 'package:marketplace/infrastructure/repositories/order_repository_impl.dart';
 import 'package:marketplace/presentation/providers/providers.dart';
 
 void main() {
@@ -41,6 +44,11 @@ class MyApp extends StatelessWidget {
         Provider<CartRepository>(
            create: (_) => CartRepositoryImpl(
              datasource: CartDatasourceImpl(tokenStorage: tokenStorage)
+           )
+        ),
+        Provider<OrderRepository>(
+           create: (_) => OrderRepositoryImpl(
+             datasource: OrderDatasourceImpl(tokenStorage: tokenStorage)
            )
         ),
         ChangeNotifierProvider(
@@ -69,7 +77,14 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => CheckoutProvider(),
+          create: (context) => CheckoutProvider(
+            orderRepository: context.read<OrderRepository>()
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => VendorProductsProvider(
+            productsRepository: context.read<ProductsRepository>()
+          ),
         ),
       ],
       child: MaterialApp.router(

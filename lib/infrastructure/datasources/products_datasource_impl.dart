@@ -5,6 +5,7 @@ import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
 import 'package:marketplace/domain/entities/details.dart';
+import 'package:marketplace/domain/entities/vendor_product.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 
 class ProductsDatasourceImpl implements ProductsDatasource {
@@ -93,5 +94,23 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     );
     
     return details;
+  }
+
+  @override
+  Future<List<VendorProduct>> getMyProducts() async {
+    final QueryOptions options = QueryOptions(
+      document: gql(myProductsQuery),
+      fetchPolicy: FetchPolicy.noCache,
+    );
+
+    final result = await client.query(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
+
+    final List<dynamic> productsData = result.data?['myProducts'] ?? [];
+    
+    return productsData.map((json) => VendorProduct.fromJson(json)).toList();
   }
 }

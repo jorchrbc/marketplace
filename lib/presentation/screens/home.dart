@@ -47,6 +47,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 context.goNamed('product-details');
               }
             ),
+            TextButton(
+              onPressed: () {
+                context.pushNamed('vendor-products');
+              },
+              child: const Text("Mis Productos (Vendedor)"),
+            ),
           ]
         ),
       ),
