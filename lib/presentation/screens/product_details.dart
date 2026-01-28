@@ -13,21 +13,26 @@ class ProductDetailsScreen extends StatefulWidget{
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
+  late ProductDetailsProvider _productDetailsProvider;
   
   @override
   void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        final provider = context.read<ProductDetailsProvider>();
-
-        provider.clearAll();
-        provider.getProductDetails(widget.id);
+        _productDetailsProvider.clearAll();
+        _productDetailsProvider.getProductDetails(widget.id);
     });
   }
 
   @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    _productDetailsProvider = context.read<ProductDetailsProvider>();
+  }
+  
+  @override
   void dispose(){
-    context.read<ProductDetailsProvider>().clearAll();
+    _productDetailsProvider.clearAll();
     super.dispose();
   }
 

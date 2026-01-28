@@ -82,7 +82,6 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       }
     }
     final data = result.data?['viewProductsById'];
-    print('cuarto flag');
     Details details = Details(
       name: data['name'],
       price: data['price'].toDouble().toString(),

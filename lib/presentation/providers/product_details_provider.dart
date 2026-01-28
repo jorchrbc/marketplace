@@ -30,14 +30,11 @@ class ProductDetailsProvider extends ChangeNotifier{
   }
   
   Future<void> getProductDetails(String id) async{
-    print('primer flag');
     isLoading = true;
     errorMessage = null;
     notifyListeners();
     try{
-      print('segundo flag');
       Details details = await productsRepository.productDetails(id);
-      print('tercer flag');
       name = details.name;
       price = details.price.toString();
       seller = "Vendedor: ${details.seller}";
