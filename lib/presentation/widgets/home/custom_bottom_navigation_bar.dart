@@ -3,24 +3,16 @@ import 'package:go_router/go_router.dart';
 
 
 class CustomBottomNavigationBar extends StatelessWidget{
-  final VoidCallback goHome;
-  final VoidCallback goProfile;
-  final VoidCallback goCreateProduct;
+  final int currentIndex;
+  
   const CustomBottomNavigationBar({
-      required this.goHome,
-      required this.goProfile,
-      required this.goCreateProduct,
+      super.key,
+      required this.currentIndex
   });
-
-  int _locationToIndex(String location){
-    if(location.startsWith('/profile')) return 1;
-    return 0;
-  }
   
   @override
   Widget build(BuildContext context){
     final location = GoRouterState.of(context).uri.toString();
-    final currentIndex = _locationToIndex(location);
     
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(
@@ -34,13 +26,11 @@ class CustomBottomNavigationBar extends StatelessWidget{
         onTap: (index){
           switch(index){
             case 0:
-              goHome();
+              context.go('/home/0');
               break;
             case 1:
-              goProfile();
+              context.go('/home/1');
               break;
-            case 2:
-              goCreateProduct();
           }
         },
         items: [
@@ -49,12 +39,8 @@ class CustomBottomNavigationBar extends StatelessWidget{
             label: 'Comprar'
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil'
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.create),
-            label: 'Crear producto'
+            label: 'Vender'
           ),
         ]
       )

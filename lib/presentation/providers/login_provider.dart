@@ -29,7 +29,6 @@ class LoginProvider extends ChangeNotifier {
     try {
       final result = await authRepository.loginUser(email, password);
       // TODO: Save token and user info
-      print('Login success: $result');
       isLoading = false;
       notifyListeners();
       return true;

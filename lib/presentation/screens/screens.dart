@@ -5,5 +5,4 @@ export 'product_form.dart';
 export 'product_details.dart';
 export 'carrito_compras.dart';
 export 'userprofile.dart';
-export 'vendor_products_screen.dart';
 export 'proceder_pago.dart';

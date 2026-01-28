@@ -3,14 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:marketplace/presentation/providers/providers.dart';
 
-class VendorProductsScreen extends StatefulWidget {
-  const VendorProductsScreen({super.key});
+class VendorProductsView extends StatefulWidget {
+  const VendorProductsView({super.key});
 
   @override
-  State<VendorProductsScreen> createState() => _VendorProductsScreenState();
+  State<VendorProductsView> createState() => _VendorProductsViewState();
 }
 
-class _VendorProductsScreenState extends State<VendorProductsScreen> {
+class _VendorProductsViewState extends State<VendorProductsView> {
   
   @override
   void initState() {
@@ -28,10 +28,6 @@ class _VendorProductsScreenState extends State<VendorProductsScreen> {
     final isLoading = vendorProvider.isLoading;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mis Productos'),
-        centerTitle: true,
-      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : products.isEmpty

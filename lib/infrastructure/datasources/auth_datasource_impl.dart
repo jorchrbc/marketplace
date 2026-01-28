@@ -41,7 +41,6 @@ class AuthDatasourceImpl implements AuthDatasource {
           return errors;
         }
       }
-      print("Usuario creado: ${result.data?['createUser']}");
       return <String, dynamic>{};
     } on TimeoutException{
       return {"connection": "Revisa tu conexión"};

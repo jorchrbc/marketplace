@@ -168,7 +168,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (!context.mounted) return;
 
                             if (success) {
-                              context.goNamed('home');
+                              print('hola');
+                              context.goNamed(
+                              'home',
+                              pathParameters: {'page': '0'}
+                              );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(loginProvider.errorMessage ?? 'Error al iniciar sesión')),

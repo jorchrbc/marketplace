@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final Size preferredSize;
@@ -19,12 +20,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
           itemBuilder: (context) => [
             PopupMenuItem(
               value: 1,
+              child: Text('Mi perfil')
+            ),
+            PopupMenuItem(
+              value: 2,
               child: Text('Cerrar sesión')
             ),
           ],
           onSelected: (value){
             if(value == 1){
+              context.push('/user-profile');
+            }
+            if(value == 2){
               logout();
+              context.go('/');
             }
           }
         )

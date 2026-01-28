@@ -17,9 +17,12 @@ final appRouter = GoRouter(
       builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(
-      path: '/home',
+      path: '/home/:page',
       name: 'home',
-      builder: (context, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
+      builder: (context, state){
+        final pageIndex = int.parse(state.pathParameters['page'] ?? '0');
+        return HomeScreen(pageIndex: pageIndex);
+      },
     ),
     GoRoute(
       path: '/create-product',
@@ -44,11 +47,6 @@ final appRouter = GoRouter(
       name: 'user-profile',
       builder: (context, state) => const UserprofileScreen(),
       ),
-    GoRoute(
-      path: '/vendor-products',
-      name: 'vendor-products',
-      builder: (context, state) => const VendorProductsScreen(),
-    ),
     GoRoute(
       path: '/checkout',
       name: 'checkout',

@@ -25,9 +25,7 @@ class HomeProvider extends ChangeNotifier{
     errorMessage = null;
     notifyListeners();
     try{
-      print('ayudame dios santoo');
       productsToBuy = await productsRepository.getProductsToBuy();
-      print('ayudame dios por 2');
       notifyListeners();
     } catch(e){
       errorMessage = e.toString();

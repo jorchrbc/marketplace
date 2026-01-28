@@ -19,7 +19,6 @@ class ProductDetailsProvider extends ChangeNotifier{
   ProductDetailsProvider({required this.productsRepository});
 
   void clearAll(){
-    print('hola?');
     name = '';
     price = '';
     seller = '';

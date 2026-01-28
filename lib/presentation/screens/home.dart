@@ -4,45 +4,30 @@ import 'package:provider/provider.dart';
 import 'package:marketplace/presentation/providers/home_provider.dart';
 import 'package:marketplace/presentation/providers/cart_provider.dart';
 import 'package:marketplace/presentation/widgets/home/home_widgets.dart';
+import 'package:marketplace/presentation/views/views.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomeScreen extends StatelessWidget{
+  static const name = 'home-screen';
+  final int pageIndex;
 
-  final String title;
+  const HomeScreen({
+      super.key,
+      required this.pageIndex
+  });
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<HomeProvider>().getProductsToBuy();
-  }
+  final viewRoutes = const <Widget>[
+    BuyProductsView(),
+    VendorProductsView(),
+  ];
   
   @override
   Widget build(BuildContext context){
     final homeProvider = Provider.of<HomeProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
-    if(homeProvider.isLoading){
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    if(homeProvider.errorMessage != null){
-      print(homeProvider.errorMessage);
-      return Scaffold(
-        body: Center(
-          child: Text(homeProvider.errorMessage!)
-        )
-      );
-    }
     return Scaffold(
-      extendBody: true,
       appBar: CustomAppBar(
         logout: () async{
           try{
             await homeProvider.logoutUser();
-            context.go('/');
           } catch(e){
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Error en la conexión')),
@@ -53,29 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
           context.push('/cart');
         }
       ),
-      body: GridViewProductsToBuy(
-        productsToBuy: homeProvider.productsToBuy,
-        addProduct: cartProvider.addItem,
-        goProductDetails: (String productId){
-          context.push(
-            '/product-details/$productId'
-          );
-        },
-        goCart: (){
-          context.push('/cart');
-        }
+      body: IndexedStack(
+        index: pageIndex,
+        
+        children: viewRoutes,
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        goHome: (){
-          context.go('/');
-        },
-        goProfile: (){
-          context.push('/vendor-products');
-        },
-        goCreateProduct: (){
-          context.push('/create-product');
-        }
-      )
+      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: pageIndex),
     );
   }
 }

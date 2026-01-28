@@ -29,7 +29,6 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     
   @override
   Future<void> createProduct(Product product) async {
-    print("Iniciando mutacion");
     final MutationOptions options = MutationOptions(
       document: gql(createNewProduct),
       variables: {
@@ -51,7 +50,6 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       if (result.hasException) {
         final exception = result.exception!;
         if(exception.linkException != null){
-          print('Network error: ${exception.linkException}');
           throw Exception("La conexión es inestable.");
         }
         if(exception.graphqlErrors.isNotEmpty){
@@ -59,7 +57,6 @@ class ProductsDatasourceImpl implements ProductsDatasource {
           throw Exception(error.message);
         }
       }
-      print('Producto creado: ${result.data?["createProduct"]}');
     } on TimeoutException {
        throw Exception("La petición tardó demasiado en responder.");
     }
@@ -77,7 +74,6 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     if (result.hasException) {
       final exception = result.exception!;
       if(exception.linkException != null){
-        print('conexion inestable');
         throw Exception("La conexión es inestable.");
       }
       if(exception.graphqlErrors.isNotEmpty){
