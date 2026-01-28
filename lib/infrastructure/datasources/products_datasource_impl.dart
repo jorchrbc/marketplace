@@ -82,11 +82,12 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       }
     }
     final data = result.data?['viewProductsById'];
+    print('cuarto flag');
     Details details = Details(
       name: data['name'],
       price: data['price'].toDouble().toString(),
       imagePath: data['image'],
-      stock: data['stock'],
+      stock: data['stock'] ?? 0,
       seller: data['user']?['name'] ?? 'Anónimo'
     );
     return details;
