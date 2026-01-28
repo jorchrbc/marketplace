@@ -5,6 +5,7 @@ import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
 import 'package:marketplace/domain/entities/details.dart';
+import 'package:marketplace/domain/entities/vendor_product.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 
 class ProductsDatasourceImpl implements ProductsDatasource {
@@ -76,6 +77,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     if (result.hasException) {
       final exception = result.exception!;
       if(exception.linkException != null){
+        print('conexion inestable');
         throw Exception("La conexión es inestable.");
       }
       if(exception.graphqlErrors.isNotEmpty){
@@ -86,12 +88,65 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     final data = result.data?['viewProductsById'];
     Details details = Details(
       name: data['name'],
-      price: data['price'],
+      price: data['price'].toDouble().toString(),
       imagePath: data['image'],
       stock: data['stock'],
-      seller: data['user']['name']
+      seller: data['user']?['name'] ?? 'Anónimo'
     );
-    
     return details;
+  }
+
+  @override
+  Future<List> getProductsToBuy() async{
+    final QueryOptions options = QueryOptions(
+      document: gql(getProductsToBuyQuery),
+      variables: {
+        'first': 10,
+        'page': 1
+      }
+    );
+    final result = await client.query(options);
+    if (result.hasException) {
+      final exception = result.exception!;
+      if(exception.linkException != null){
+        throw Exception("La conexión es inestable.");
+      }
+      if(exception.graphqlErrors.isNotEmpty){
+        final error = exception.graphqlErrors.first;
+        throw Exception(error.message);
+      }
+    }
+    final data = result.data?['allProducts']['data'];
+    List<Details> product_details = [];
+    for (var item in data){
+      product_details.add(Details(
+          name: item['name'],
+          price: item['price'].toDouble().toString(),
+          imagePath: item['image'],
+          stock: item['stock'],
+          seller: item['user']?['name'] ?? 'Anónimo',
+          id: item['id']
+        )
+      );
+    }
+    return product_details;
+  }
+
+  @override
+  Future<List<VendorProduct>> getMyProducts() async {
+    final QueryOptions options = QueryOptions(
+      document: gql(myProductsQuery),
+      fetchPolicy: FetchPolicy.noCache,
+    );
+
+    final result = await client.query(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
+
+    final List<dynamic> productsData = result.data?['myProducts'] ?? [];
+    
+    return productsData.map((json) => VendorProduct.fromJson(json)).toList();
   }
 }

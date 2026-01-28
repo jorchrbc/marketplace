@@ -24,3 +24,46 @@ query DetallesProducto($id: ID!){
   }
 }
 ''';
+
+
+const String myProductsQuery = r'''
+query MisProductos{
+  myProducts {
+    id
+    name
+    price
+    stock
+    image
+  }
+}
+''';
+  
+const String getProductsToBuyQuery = r'''
+query getProducts {
+  allProducts(first: 10, page: 1) {
+    paginatorInfo {
+      count
+      currentPage
+      firstItem
+      hasMorePages
+      lastItem
+      lastPage
+      perPage
+      total
+    }
+    data {
+      id
+      name
+      price
+      stock
+      image
+      created_at
+      updated_at
+      user_id
+      user{
+        name
+      }
+    }
+  }
+}
+''';

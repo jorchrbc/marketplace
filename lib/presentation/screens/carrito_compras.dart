@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/providers/cart_provider.dart';
 import 'package:marketplace/domain/entities/cart_item.dart';
 import 'package:provider/provider.dart';
@@ -117,10 +118,7 @@ class _CarritoComprasScreenState extends State<CarritoComprasScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => const ProcederPagoScreen())
-                          );
+                          context.pushNamed('checkout');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor,

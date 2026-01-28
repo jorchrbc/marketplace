@@ -4,8 +4,21 @@ import 'package:marketplace/presentation/providers/cart_provider.dart';
 import 'package:marketplace/presentation/providers/checkout_provider.dart';
 import 'package:marketplace/presentation/screens/order_confirmation_screen.dart';
 
-class ProcederPagoScreen extends StatelessWidget {
+class ProcederPagoScreen extends StatefulWidget {
   const ProcederPagoScreen({super.key});
+
+  @override
+  State<ProcederPagoScreen> createState() => _ProcederPagoScreenState();
+}
+
+class _ProcederPagoScreenState extends State<ProcederPagoScreen> {
+  final TextEditingController _addressController = TextEditingController();
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +49,7 @@ class ProcederPagoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -48,32 +61,16 @@ class ProcederPagoScreen extends StatelessWidget {
                   )
                 ]
               ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
-                      shape: BoxShape.circle
-                    ),
-                    child: const Icon(Icons.location_on, color: primaryColor),
-                  ),
-                  const SizedBox(width: 15),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Casa", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        SizedBox(height: 4),
-                        Text("Av. Principal 123, Col. Centro, CDMX", style: TextStyle(color: Colors.grey))
-                      ],
-                    )
-                  ),
-                  TextButton(
-                    onPressed: (){}, 
-                    child: const Text("Editar", style: TextStyle(color: primaryColor))
-                  )
-                ],
+              child: TextFormField(
+                controller: _addressController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.location_on, color: primaryColor),
+                  hintText: "Ingresa tu dirección completa",
+                  border: InputBorder.none,
+                  labelText: "Dirección de entrega"
+                ),
+                maxLines: 2,
+                minLines: 1,
               ),
             ),
             
@@ -111,10 +108,21 @@ class ProcederPagoScreen extends StatelessWidget {
             _PaymentMethodCard(
                value: 3, 
                groupValue: checkoutProvider.selectedPaymentMethod, 
-               label: "Pago en Efectivo (Contra entrega)",
+               label: "Pago en Efectivo",
                icon: Icons.money,
                color: Colors.green,
                onChanged: (_) => checkoutProvider.changePaymentMethod(3),
+            ),
+            const SizedBox(height: 10),
+
+            // Opcion 4: PayPal
+            _PaymentMethodCard(
+               value: 4, 
+               groupValue: checkoutProvider.selectedPaymentMethod, 
+               label: "PayPal",
+               icon: Icons.account_balance_wallet,
+               color: Colors.blue[800]!,
+               onChanged: (_) => checkoutProvider.changePaymentMethod(4),
             ),
 
             const SizedBox(height: 25),
@@ -174,12 +182,33 @@ class ProcederPagoScreen extends StatelessWidget {
                 onPressed: checkoutProvider.isLoading 
                   ? null 
                   : () async {
-                      final success = await checkoutProvider.processPayment();
+                      if (_addressController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(
+                             content: Text('Por favor ingresa una dirección de envío'),
+                             backgroundColor: Colors.orange,
+                           )
+                         );
+                         return;
+                      }
+
+                      final success = await checkoutProvider.processPayment(
+                        _addressController.text.trim(),
+                        cartProvider.items
+                      );
+                      
                       if (context.mounted && success) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => const OrderConfirmationScreen())
                         );
+                      } else if (context.mounted && !success) {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(
+                             content: Text('Error al procesar el pago'),
+                             backgroundColor: Colors.red,
+                           )
+                         );
                       }
                   },
                 style: ElevatedButton.styleFrom(
