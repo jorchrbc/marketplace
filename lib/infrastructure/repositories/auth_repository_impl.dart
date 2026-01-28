@@ -16,9 +16,6 @@ class AuthRepositoryImpl extends AuthRepository{
   @override
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     final data = await datasource.loginUser(email, password);
-    print("tried login");
-    print("${data}");
-    print("algo");
     await tokenStorage.saveToken(
       "${data['token_type']} ${data['access_token']}"
     );

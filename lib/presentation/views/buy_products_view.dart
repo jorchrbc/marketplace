@@ -16,13 +16,16 @@ class _BuyProductsViewState extends State<BuyProductsView> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeProvider>().getProductsToBuy();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<HomeProvider>().getProductsToBuy();
+    });
   }
   
   @override
   Widget build(BuildContext context){
-    final homeProvider = Provider.of<HomeProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
+    final homeProvider = context.watch<HomeProvider>();
+    final cartProvider = context.read<CartProvider>();
+
     if(homeProvider.isLoading){
       return Center(child: CircularProgressIndicator());
     }
