@@ -7,8 +7,8 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/',
       name: 'login',
-      //builder: (context, state) => const ProductForm(),
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const UserprofileScreen(),
+      //builder: (context, state) => const LoginScreen(),
 
     ),
     GoRoute(

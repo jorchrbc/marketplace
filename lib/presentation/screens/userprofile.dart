@@ -62,6 +62,20 @@ class UserprofileScreen extends StatelessWidget {
             ),
             SizedBox(height: 5),
 
+            Row(
+              children: [
+                CustomCard(icon: Icons.shopping_bag_outlined, title: 'Pedidos', subtitle: '',
+                onTap: () { 
+                  context.push('/home');
+                  }
+                ),
+                CustomCard(icon: Icons.list_alt_rounded, title: 'Productos', subtitle: '',
+                onTap: (){
+                  context.push('/home');
+                },)
+              ],
+            ),
+
             CustomCard(icon: Icons.logout_outlined, title: 'Cerrar sesión', subtitle: '',
             onTap: () async{
              // final logoutProvider = context.read<LoginProvider>();
