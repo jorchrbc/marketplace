@@ -4,8 +4,37 @@ import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/widgets/product_details/images_swiper.dart';
 import 'package:marketplace/presentation/providers/product_details_provider.dart';
 
-class ProductDetailsScreen extends StatelessWidget{
-  const ProductDetailsScreen();
+class ProductDetailsScreen extends StatefulWidget{
+  final String id;
+  const ProductDetailsScreen({required this.id});
+
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
+  late ProductDetailsProvider _productDetailsProvider;
+  
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        _productDetailsProvider.clearAll();
+        _productDetailsProvider.getProductDetails(widget.id);
+    });
+  }
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    _productDetailsProvider = context.read<ProductDetailsProvider>();
+  }
+  
+  @override
+  void dispose(){
+    _productDetailsProvider.clearAll();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -24,19 +53,7 @@ class ProductDetailsScreen extends StatelessWidget{
     }
     
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: (){
-              productDetailsProvider.clearAll();
-              context.goNamed('home');
-            }
-          )
-        ]
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.only(bottom: 150, left: 15, right: 15),

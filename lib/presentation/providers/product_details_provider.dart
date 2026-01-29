@@ -28,36 +28,36 @@ class ProductDetailsProvider extends ChangeNotifier{
     isLoading = false;
     notifyListeners();
   }
-  getProductDetails() async{
+  
+  Future<void> getProductDetails(String id) async{
     isLoading = true;
     errorMessage = null;
     notifyListeners();
     try{
-    Details details = await productsRepository.productDetails("2");
-
-    name = details.name;
-    price = details.price.toString();
-    seller = "Vendedor: ${details.seller}";
-    
-    image = Image.network(
-      details.imagePath!,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace){
-        return Image.network(
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdpU431xPGZoWC2RW7DAlWe29mnpo2z5m13Q&s",
-          fit: BoxFit.cover
-        );
-      }
-    );
-    image_cards.add(
-      Card(
-        child: SizedBox(
-          width: double.infinity,
-          height: 300,
-          child: image
+      Details details = await productsRepository.productDetails(id);
+      name = details.name;
+      price = details.price.toString();
+      seller = "Vendedor: ${details.seller}";
+      
+      image = Image.network(
+        details.imagePath!,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace){
+          return Image.network(
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdpU431xPGZoWC2RW7DAlWe29mnpo2z5m13Q&s",
+            fit: BoxFit.cover
+          );
+        }
+      );
+      image_cards.add(
+        Card(
+          child: SizedBox(
+            width: double.infinity,
+            height: 300,
+            child: image
+          )
         )
-      )
-    );
+      );
     } catch(e){
       errorMessage = e.toString();
     } finally {
