@@ -1,13 +1,29 @@
 const String createNewProduct = r'''
-  mutation PublicarProducto($name: String!, $price: Float!,$stock: Int!, $image: Upload) {
-  createProduct(name: $name, price: $price, image: $image, stock: stock) {
+  mutation PublicarProducto($name: String!, $price: Float!,$stock: Int!, $image: Upload,$description: String) {
+  createProduct(
+    name: $name
+    price: $price
+    stock: $stock
+    image: $image
+    description: $description
+    )
+    {
     id
     name
     price
     stock
     image
+    description
     created_at
-  }
+    uptdated_at
+    user_id
+    user{
+      id
+      name
+      email
+      number
+      }
+    }
 }
 ''';
 

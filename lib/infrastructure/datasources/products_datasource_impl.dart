@@ -35,6 +35,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
         'name': product.name,
         'price': product.price,
         'stock':product.stock,
+        'description':product.dscrp,
         'image': product.imageFile != null
           ? await http.MultipartFile.fromBytes(
             'image',
