@@ -31,4 +31,22 @@ class VendorProductsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> deleteProduct(String id) async {
+    _isLoading = true;
+    notifyListeners();
+    
+    try {
+      await productsRepository.deleteProduct(id);
+      // Actualizar la lista localmente solo si la llamada al backend tuvo éxito
+      _products.removeWhere((p) => p.id == id);
+    } catch (e) {
+      _errorMessage = e.toString();
+      // Opcional: Recargar la lista completa si hubo un error para asegurar consistencia
+      await loadProducts();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

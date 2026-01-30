@@ -146,4 +146,21 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     
     return productsData.map((json) => VendorProduct.fromJson(json)).toList();
   }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(deleteProductMutation),
+      variables: {
+        'id': id,
+      },
+      fetchPolicy: FetchPolicy.noCache,
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
+  }
 }
