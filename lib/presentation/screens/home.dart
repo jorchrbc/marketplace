@@ -23,25 +23,36 @@ class HomeScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     final homeProvider = Provider.of<HomeProvider>(context);
+    
     return Scaffold(
       appBar: CustomAppBar(
         logout: () async{
-          try{
-            await homeProvider.logoutUser();
-          } catch(e){
+          await homeProvider.logoutUser();
+          if(homeProvider.errorMessage != null){
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Error en la conexión')),
+              SnackBar(content: Text(homeProvider.errorMessage!)),
             );
           }
+          context.go('/');
         },
         goCart: () {
           context.push('/cart');
+        },
+        goUserProfile: (){
+          context.push('/user-profile');
         }
       ),
-      body: IndexedStack(
-        index: pageIndex,
-        
-        children: viewRoutes,
+      body: Stack(
+        children: [
+          IndexedStack(
+            index: pageIndex,
+            children: viewRoutes,
+          ),
+          if(homeProvider.isLoading)
+            Container(
+              child: const Center(child: CircularProgressIndicator()),
+            )
+        ]
       ),
       bottomNavigationBar: CustomBottomNavigationBar(currentIndex: pageIndex),
     );

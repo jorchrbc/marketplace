@@ -3,28 +3,29 @@ import 'package:marketplace/domain/repositories/products_repository.dart';
 import 'package:marketplace/domain/repositories/auth_repository.dart';
 import 'package:marketplace/domain/entities/details.dart';
 
-class HomeProvider extends ChangeNotifier{
+class BuyProductsProvider extends ChangeNotifier{
+  List productsToBuy = [];
   bool isLoading = false;
   String? errorMessage;
 
-  AuthRepository authRepository;
+  ProductsRepository productsRepository;
 
-  HomeProvider({
-      required this.authRepository,
+  BuyProductsProvider({
+      required this.productsRepository,
   });
-
-  Future<void> logoutUser() async{
+  
+  Future<void> getProductsToBuy() async{
     isLoading = true;
     errorMessage = null;
     notifyListeners();
     try{
-      await authRepository.logoutUser();
+      productsToBuy = await productsRepository.getProductsToBuy();
+      notifyListeners();
     } catch(e){
       errorMessage = e.toString();
-    } finally{
+    } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 }
-

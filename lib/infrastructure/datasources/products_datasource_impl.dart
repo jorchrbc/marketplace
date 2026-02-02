@@ -98,6 +98,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   Future<List> getProductsToBuy() async{
     final QueryOptions options = QueryOptions(
       document: gql(getProductsToBuyQuery),
+      fetchPolicy: FetchPolicy.noCache,
       variables: {
         'first': 10,
         'page': 1

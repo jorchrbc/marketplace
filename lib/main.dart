@@ -88,8 +88,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => HomeProvider(
-            productsRepository: context.read<ProductsRepository>(),
             authRepository: context.read<AuthRepository>(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => BuyProductsProvider(
+            productsRepository: context.read<ProductsRepository>(),
           ),
         ),
       ],

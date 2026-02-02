@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:marketplace/presentation/providers/home_provider.dart';
+import 'package:marketplace/presentation/providers/buy_products_provider.dart';
 import 'package:marketplace/presentation/providers/cart_provider.dart';
-import 'package:marketplace/presentation/widgets/home/home_widgets.dart';
+import 'package:marketplace/presentation/widgets/buy_products/buy_products_widgets.dart';
 
 class BuyProductsView extends StatefulWidget {
   const BuyProductsView({super.key});
@@ -17,26 +17,31 @@ class _BuyProductsViewState extends State<BuyProductsView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<HomeProvider>().getProductsToBuy();
+        context.read<BuyProductsProvider>().getProductsToBuy();
     });
   }
   
   @override
   Widget build(BuildContext context){
-    final homeProvider = context.watch<HomeProvider>();
+    final buyProductsProvider = context.watch<BuyProductsProvider>();
     final cartProvider = context.read<CartProvider>();
 
-    if(homeProvider.isLoading){
+    if(buyProductsProvider.isLoading){
       return Center(child: CircularProgressIndicator());
     }
-    if(homeProvider.errorMessage != null){
-      print(homeProvider.errorMessage);
+    
+    if(buyProductsProvider.errorMessage != null){
+      print(buyProductsProvider.errorMessage);
       return Center(
-          child: Text(homeProvider.errorMessage!)
+          child: Text(buyProductsProvider.errorMessage!)
         );
     }
+    
+    if(buyProductsProvider.productsToBuy.isEmpty){
+      return Center(child: Text('No hay productos para mostrar.'));
+    }
     return GridViewProductsToBuy(
-      productsToBuy: homeProvider.productsToBuy,
+      productsToBuy: buyProductsProvider.productsToBuy,
       addProduct: cartProvider.addItem,
       goProductDetails: (String productId){
         context.push(
