@@ -95,13 +95,13 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   }
 
   @override
-  Future<List> getProductsToBuy() async{
+  Future<List> getProductsToBuy({int page = 1}) async{
     final QueryOptions options = QueryOptions(
       document: gql(getProductsToBuyQuery),
       fetchPolicy: FetchPolicy.noCache,
       variables: {
         'first': 10,
-        'page': 1
+        'page': page
       }
     );
     final result = await client.query(options);

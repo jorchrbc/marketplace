@@ -3,29 +3,56 @@ import 'package:marketplace/domain/repositories/products_repository.dart';
 import 'package:marketplace/domain/repositories/auth_repository.dart';
 import 'package:marketplace/domain/entities/details.dart';
 
-class BuyProductsProvider extends ChangeNotifier{
+class BuyProductsProvider extends ChangeNotifier {
   List productsToBuy = [];
-  bool isLoading = false;
+
+  bool isInitialLoading = false;
+  bool isFetchingMore = false;
+
   String? errorMessage;
+  int currentPage = 1;
+  bool hasMore = true;
 
-  ProductsRepository productsRepository;
+  final ProductsRepository productsRepository;
 
-  BuyProductsProvider({
-      required this.productsRepository,
-  });
-  
-  Future<void> getProductsToBuy() async{
-    isLoading = true;
+  BuyProductsProvider({required this.productsRepository});
+
+  Future<void> getProductsToBuy({bool nextPage = false}) async {
+    if (!hasMore && nextPage) return;
+    if (isFetchingMore && nextPage) return;
+
     errorMessage = null;
+
+    if (nextPage) {
+      isFetchingMore = true;
+    } else {
+      isInitialLoading = true;
+      currentPage = 1;
+      hasMore = true;
+    }
+
     notifyListeners();
-    try{
-      productsToBuy = await productsRepository.getProductsToBuy();
-      notifyListeners();
-    } catch(e){
+
+    try {
+      final pageToFetch = nextPage ? currentPage + 1 : 1;
+      final newProducts =
+          await productsRepository.getProductsToBuy(page: pageToFetch);
+
+      if (nextPage) {
+        productsToBuy.addAll(newProducts);
+        currentPage++;
+      } else {
+        productsToBuy = newProducts;
+      }
+
+      if (newProducts.isEmpty) hasMore = false;
+    } catch (e) {
       errorMessage = e.toString();
     } finally {
-      isLoading = false;
+      isInitialLoading = false;
+      isFetchingMore = false;
       notifyListeners();
     }
   }
 }
+

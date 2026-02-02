@@ -7,17 +7,21 @@ class GridViewProductsToBuy extends StatelessWidget{
   final void Function(String productId) goProductDetails;
   final void Function(String productId, int quantity) addProduct;
   final VoidCallback goCart;
+  final ScrollController scrollController;
+  
   const GridViewProductsToBuy(
     {
       required this.productsToBuy,
       required this.goProductDetails,
       required this.goCart,
       required this.addProduct,
+      required this.scrollController
     }
   );
 
   Widget build(BuildContext context){
     return GridView.builder(
+      controller: scrollController,
       itemCount: productsToBuy.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

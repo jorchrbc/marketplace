@@ -13,12 +13,30 @@ class BuyProductsView extends StatefulWidget {
 }
 
 class _BuyProductsViewState extends State<BuyProductsView> {
+  late ScrollController _scrollController;
+  
   @override
   void initState() {
     super.initState();
+    final provider = context.read<BuyProductsProvider>();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener((){
+        if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200){
+          if(!provider.isFetchingMore && provider.hasMore){
+            provider.getProductsToBuy(nextPage: true);
+          }
+        }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<BuyProductsProvider>().getProductsToBuy();
     });
+  }
+
+  @override
+  void dispose(){
+    _scrollController.dispose();
+    super.dispose();
   }
   
   @override
@@ -26,7 +44,7 @@ class _BuyProductsViewState extends State<BuyProductsView> {
     final buyProductsProvider = context.watch<BuyProductsProvider>();
     final cartProvider = context.read<CartProvider>();
 
-    if(buyProductsProvider.isLoading){
+    if(buyProductsProvider.isInitialLoading && buyProductsProvider.productsToBuy.isEmpty){
       return Center(child: CircularProgressIndicator());
     }
     
@@ -50,7 +68,8 @@ class _BuyProductsViewState extends State<BuyProductsView> {
       },
       goCart: (){
         context.push('/cart');
-      }
+      },
+      scrollController: _scrollController,
     );
   }
 }
