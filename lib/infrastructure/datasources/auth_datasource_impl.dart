@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
 import 'package:marketplace/domain/entities/user.dart';
 import 'package:marketplace/infrastructure/graphql/auth_mutations.dart';
+
 class AuthDatasourceImpl implements AuthDatasource {
   late final GraphQLClient client;
 
   AuthDatasourceImpl(){
-    // final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
-    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink(endpoint);
     client = GraphQLClient(
         link: httpLink,
         cache: GraphQLCache(),

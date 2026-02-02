@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/datasources/order_datasource.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 import 'package:marketplace/infrastructure/graphql/order_mutations.dart';
@@ -8,7 +9,7 @@ class OrderDatasourceImpl implements OrderDatasource {
   final TokenStorage tokenStorage;
 
   OrderDatasourceImpl({required this.tokenStorage}) {
-    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink(endpoint);
     final authLink = AuthLink(
       getToken: () async {
         final token = await tokenStorage.getToken();

@@ -1,6 +1,7 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/cart_datasource.dart';
 import 'package:marketplace/domain/entities/cart.dart';
+import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 import 'package:marketplace/infrastructure/graphql/cart_operations.dart';
 
@@ -9,7 +10,7 @@ class CartDatasourceImpl implements CartDatasource {
   final TokenStorage tokenStorage;
 
   CartDatasourceImpl({required this.tokenStorage}) {
-    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink(endpoint);
     final authLink = AuthLink(
       getToken: () async {
         final token = await tokenStorage.getToken();

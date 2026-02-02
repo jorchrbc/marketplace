@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
@@ -13,7 +14,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   final TokenStorage tokenStorage;
 
   ProductsDatasourceImpl({required this.tokenStorage}){
-    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink(endpoint);
     final authLink = AuthLink(
       getToken: () async{
         final token = await tokenStorage.getToken();
