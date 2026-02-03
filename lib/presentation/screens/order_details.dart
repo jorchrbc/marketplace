@@ -33,7 +33,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>{
     if(orderDetailsProvider.errorMessage != null) {
       return Scaffold(
         body: Center(
-          child: Text(orderDetailsProvider.errorMessage!)
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.wifi_off,
+                size: 80,
+                color: Colors.grey
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: (){
+                  context.read<OrderDetailsProvider>().getOrderDetails(widget.orderId);
+                },
+                child: const Text('Reintentar')
+              )
+            ]
+          )
         )
       );
     }

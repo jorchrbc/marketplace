@@ -51,8 +51,24 @@ class _BuyProductsViewState extends State<BuyProductsView> {
     if(buyProductsProvider.errorMessage != null){
       print(buyProductsProvider.errorMessage);
       return Center(
-          child: Text(buyProductsProvider.errorMessage!)
-        );
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.wifi_off,
+              size: 80,
+              color: Colors.grey
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: (){
+                context.read<BuyProductsProvider>().getProductsToBuy();
+              },
+              child: const Text('Reintentar')
+            )
+          ]
+        )
+      );
     }
     
     if(buyProductsProvider.productsToBuy.isEmpty){
