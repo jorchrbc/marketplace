@@ -1,12 +1,27 @@
 const String createNewProduct = r'''
-  mutation PublicarProducto($name: String!, $price: Float!,$stock: Int!, $image: Upload) {
-  createProduct(name: $name, price: $price, image: $image, stock: stock) {
+  mutation PublicarProducto($name: String!, $price: Float!, $stock: Int!, $image: Upload, $description: String) {
+  createProduct(
+    name: $name
+    price: $price
+    stock: $stock
+    image: $image
+    description: $description
+  ) {
     id
     name
     price
     stock
     image
+    description
     created_at
+    updated_at
+    user_id
+    user {
+      id
+      name
+      email
+      number
+    }
   }
 }
 ''';
@@ -17,6 +32,7 @@ query DetallesProducto($id: ID!){
     id
     name
     price
+    description
     image
     user{
       name
@@ -39,8 +55,8 @@ query MisProductos{
 ''';
   
 const String getProductsToBuyQuery = r'''
-query getProducts {
-  allProducts(first: 10, page: 1) {
+query getProducts($page: Int!) {
+  allProducts(first: 10, page: $page) {
     paginatorInfo {
       count
       currentPage
@@ -64,6 +80,15 @@ query getProducts {
         name
       }
     }
+  }
+}
+''';
+
+const String deleteProductMutation = r'''
+mutation DeleteProduct($id: ID!) {
+  deleteProduct(id: $id) {
+    id
+    name
   }
 }
 ''';

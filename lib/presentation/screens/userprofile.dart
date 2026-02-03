@@ -46,26 +46,40 @@ class UserprofileScreen extends StatelessWidget {
             SizedBox(height: 5),
             
             CustomCard(icon: Icons.shop, title: 'Ventas', subtitle: 'subtitle'),
-            SizedBox(height: 240),
+            // SizedBox(height: 240),
 
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
-              child: InkWell(
-                onTap: (){
-                  context.push('/create-product');
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 45,vertical: 5),
-                  child: Text('product'),
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
+            // Card(
+            //   margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+            //   child: InkWell(
+            //     onTap: (){
+            //       context.push('/create-product');
+            //     },
+            //     child: Padding(
+            //       padding: EdgeInsets.symmetric(horizontal: 45,vertical: 5),
+            //       child: Text('product'),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 5),
 
-            CustomCard(icon: Icons.logout_outlined, title: 'Cerrar sesión', subtitle: '',
-            onTap: () async{
-             // final logoutProvider = context.read<LoginProvider>();
-            })
+            // Row(
+            //   children: [
+            //     CustomCard(icon: Icons.shopping_bag_outlined, title: 'Pedidos', subtitle: '',
+            //     onTap: () { 
+            //       context.push('/home');
+            //       }
+            //     ),
+            //     CustomCard(icon: Icons.list_alt_rounded, title: 'Productos', subtitle: '',
+            //     onTap: (){
+            //       context.push('/home');
+            //     },)
+            //   ],
+            // ),
+
+            // CustomCard(icon: Icons.logout_outlined, title: 'Cerrar sesión', subtitle: '',
+            // onTap: () async{
+            //  // final logoutProvider = context.read<LoginProvider>();
+            // })
           ],
         ),
       ),

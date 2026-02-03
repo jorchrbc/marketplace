@@ -1,12 +1,19 @@
 import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
+import 'package:marketplace/presentation/views/views.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
+      path: '/vendor-products',
+      name: 'vendor-products',
+      builder: (context, state) => const VendorProductsView(),
+    ),
+    GoRoute(
       path: '/',
       name: 'login',
+      //builder: (context, state) => const UserprofileScreen(),
       //builder: (context, state) => const ProductForm(),
       builder: (context, state) => const LoginScreen(),
 
@@ -51,6 +58,14 @@ final appRouter = GoRouter(
       path: '/checkout',
       name: 'checkout',
       builder: (context, state) => const ProcederPagoScreen(),
+    ),
+    GoRoute(
+      path: '/order-details/:id',
+      name: 'order-details',
+      builder: (context, state){
+        final id = state.pathParameters['id']!;
+        return OrderDetailsScreen(orderId: id);
+      },
     ),
   ]
 );

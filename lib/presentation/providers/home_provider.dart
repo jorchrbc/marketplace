@@ -4,39 +4,27 @@ import 'package:marketplace/domain/repositories/auth_repository.dart';
 import 'package:marketplace/domain/entities/details.dart';
 
 class HomeProvider extends ChangeNotifier{
-  List productsToBuy = [];
   bool isLoading = false;
   String? errorMessage;
 
-  ProductsRepository productsRepository;
   AuthRepository authRepository;
 
   HomeProvider({
-      required this.productsRepository,
       required this.authRepository,
   });
 
-  void clearAll(){
-    notifyListeners();
-  }
-  
-  Future<void> getProductsToBuy() async{
+  Future<void> logoutUser() async{
     isLoading = true;
     errorMessage = null;
     notifyListeners();
     try{
-      productsToBuy = await productsRepository.getProductsToBuy();
-      notifyListeners();
+      await authRepository.logoutUser();
     } catch(e){
       errorMessage = e.toString();
-    } finally {
+    } finally{
       isLoading = false;
       notifyListeners();
     }
-  }
-
-  Future<void> logoutUser() async{
-    await authRepository.logoutUser();
   }
 }
 

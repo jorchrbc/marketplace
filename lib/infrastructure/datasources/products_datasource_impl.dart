@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
@@ -13,7 +14,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   final TokenStorage tokenStorage;
 
   ProductsDatasourceImpl({required this.tokenStorage}){
-    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink(endpoint);
     final authLink = AuthLink(
       getToken: () async{
         final token = await tokenStorage.getToken();
@@ -35,6 +36,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
         'name': product.name,
         'price': product.price,
         'stock':product.stock,
+        'description':product.dscrp,
         'image': product.imageFile != null
           ? await http.MultipartFile.fromBytes(
             'image',
@@ -86,6 +88,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       name: data['name'],
       price: data['price'].toDouble().toString(),
       imagePath: data['image'],
+      description: data['description'],
       stock: data['stock'] ?? 0,
       seller: data['user']?['name'] ?? 'Anónimo'
     );
@@ -93,12 +96,13 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   }
 
   @override
-  Future<List> getProductsToBuy() async{
+  Future<List> getProductsToBuy({int page = 1}) async{
     final QueryOptions options = QueryOptions(
       document: gql(getProductsToBuyQuery),
+      fetchPolicy: FetchPolicy.noCache,
       variables: {
         'first': 10,
-        'page': 1
+        'page': page
       }
     );
     final result = await client.query(options);
@@ -144,5 +148,22 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     final List<dynamic> productsData = result.data?['myProducts'] ?? [];
     
     return productsData.map((json) => VendorProduct.fromJson(json)).toList();
+  }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(deleteProductMutation),
+      variables: {
+        'id': id,
+      },
+      fetchPolicy: FetchPolicy.noCache,
+    );
+
+    final result = await client.mutate(options);
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
   }
 }

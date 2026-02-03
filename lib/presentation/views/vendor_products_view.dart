@@ -101,6 +101,40 @@ class _VendorProductsViewState extends State<VendorProductsView> {
                             ],
                           ),
                         ),
+                        // Delete Icon
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Eliminar producto"),
+                                  content: const Text("¿Realmente quieres eliminar este producto?"),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text("Cancelar"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text("Eliminar", style: TextStyle(color: Colors.red)),
+                                      onPressed: () {
+                                        context.read<VendorProductsProvider>().deleteProduct(product.id);
+                                        context.read<BuyProductsProvider>().getProductsToBuy();
+                                        Navigator.of(context).pop();
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('Producto eliminado'))
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

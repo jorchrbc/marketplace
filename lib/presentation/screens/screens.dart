@@ -6,3 +6,4 @@ export 'product_details.dart';
 export 'carrito_compras.dart';
 export 'userprofile.dart';
 export 'proceder_pago.dart';
+export 'order_details.dart';

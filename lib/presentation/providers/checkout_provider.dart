@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/domain/entities/cart_item.dart';
 import 'package:marketplace/domain/repositories/order_repository.dart';
+import 'package:marketplace/domain/entities/order_result.dart';
 
 class CheckoutProvider extends ChangeNotifier {
   final OrderRepository orderRepository;
+  String? _orderId;
 
   CheckoutProvider({required this.orderRepository});
-
+  
   int _selectedPaymentMethod = 1; // 1: Mastercard, 2: Visa, 3: Efectivo
   bool _isLoading = false;
 
+  String? get orderId => _orderId;
   int get selectedPaymentMethod => _selectedPaymentMethod;
   bool get isLoading => _isLoading;
 
@@ -48,8 +51,10 @@ class CheckoutProvider extends ChangeNotifier {
     }).toList();
 
     try {
-      final success = await orderRepository.createOrder(
+      final OrderResult orderResult = await orderRepository.createOrder(
           address, paymentMethodStr, itemsInput);
+      final success = orderResult.success;
+      _orderId = orderResult.orderId;
 
       _isLoading = false;
       notifyListeners();

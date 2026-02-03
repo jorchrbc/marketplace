@@ -5,7 +5,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final Size preferredSize;
   final VoidCallback logout;
   final VoidCallback goCart;
-  const CustomAppBar({Key? key, required this.logout, required this.goCart})
+  final VoidCallback goUserProfile;
+  const CustomAppBar({Key? key, required this.logout, required this.goCart, required this.goUserProfile
+  })
     : preferredSize = const Size.fromHeight(kToolbarHeight),
     super(key: key);
 
@@ -29,11 +31,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
           ],
           onSelected: (value){
             if(value == 1){
-              context.push('/user-profile');
+              goUserProfile();
             }
             if(value == 2){
               logout();
-              context.go('/');
             }
           }
         )

@@ -6,5 +6,6 @@ abstract class ProductsDatasource{
   Future<void> createProduct(Product product);
   Future<Details> productDetails(String id);
   Future<List<VendorProduct>> getMyProducts();
-  Future<List> getProductsToBuy();
+  Future<void> deleteProduct(String id);
+  Future<List> getProductsToBuy({int page});
 }

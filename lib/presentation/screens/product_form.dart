@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:marketplace/presentation/widgets/create_product/create_product_widgets.dart';
 import 'package:marketplace/presentation/providers/create_product_provider.dart';
+import 'package:marketplace/presentation/providers/vendor_products_provider.dart';
+import 'package:marketplace/presentation/providers/buy_products_provider.dart';
 
 class ProductForm extends StatefulWidget {
   const ProductForm({super.key});
@@ -194,6 +196,12 @@ class _ProductFormStateInternal extends State<_ProductForm> {
              _descripController.clear();
              // Limpiar provider state
              createProductProvider.clearForm();
+
+             // Recargar la lista de productos del vendedor
+             if (mounted) {
+               context.read<VendorProductsProvider>().loadProducts();
+               context.read<BuyProductsProvider>().getProductsToBuy();
+             }
 
              if (mounted) {
                ScaffoldMessenger.of(context).showSnackBar(

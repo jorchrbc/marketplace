@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:marketplace/presentation/providers/checkout_provider.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
   const OrderConfirmationScreen({super.key});
@@ -72,9 +75,15 @@ class OrderConfirmationScreen extends StatelessWidget {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Detalles despues de implementar"))
-                    );
+                    final checkoutProvider = context.read<CheckoutProvider>();
+                    String? orderId = checkoutProvider.orderId;
+                    if(orderId != null){
+                      context.push('/order-details/$orderId');
+                    } else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error inesperado')),
+                      );
+                    }
                   },
                    style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: primaryColor),
