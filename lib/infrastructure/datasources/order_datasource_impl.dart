@@ -4,6 +4,7 @@ import 'package:marketplace/domain/datasources/order_datasource.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 import 'package:marketplace/infrastructure/graphql/order_mutations.dart';
 import 'package:marketplace/domain/entities/order_details.dart';
+import 'package:marketplace/domain/entities/order_result.dart';
 
 class OrderDatasourceImpl implements OrderDatasource {
   late final GraphQLClient client;
@@ -27,7 +28,7 @@ class OrderDatasourceImpl implements OrderDatasource {
   }
 
   @override
-  Future<bool> createOrder(String address, String paymentMethod, List<Map<String, dynamic>> items) async {
+  Future<OrderResult> createOrder(String address, String paymentMethod, List<Map<String, dynamic>> items) async {
     final MutationOptions options = MutationOptions(
       document: gql(createOrderMutation),
       variables: {
@@ -43,15 +44,15 @@ class OrderDatasourceImpl implements OrderDatasource {
     if (result.hasException) {
       print('Error creating order: ${result.exception}');
       // You might want to throw an exception here or return false
-      return false;
+      return OrderResult(false);
     }
 
     final data = result.data;
     if (data != null && data['newOrder'] != null) {
-      return true;
+      return OrderResult(true, data!['newOrder']['id']);
     }
 
-    return false;
+    return OrderResult(false);
   }
   
   @override
