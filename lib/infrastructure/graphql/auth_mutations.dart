@@ -4,21 +4,16 @@ const String createUserMutation = r'''
     $email: String!, 
     $number: String!, 
     $password: String!, 
-    $role_id: ID!
   ) {
     createUser(
       name: $name,
       email: $email,
       number: $number,
       password: $password,
-      role_id: $role_id
     ) {
-      id
       name
       email
-      role {
-        name
-      }
+      number
     }
   }
 ''';

@@ -19,8 +19,6 @@ class RegisterProvider extends ChangeNotifier{
   String? passwordErrorApi;
   String confirmPassword = '';
   String? confirmPasswordError;
-  String role = '';
-  String? roleError;
   User? user;
   AuthRepository authRepository;
 
@@ -82,15 +80,6 @@ class RegisterProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-  
-  void validateRole(){
-    if(role.isEmpty){
-      roleError = 'Escoge un rol';
-    }else{
-      roleError = null;
-    }
-    notifyListeners();
-  }
 
   bool validateAllFields() {
     validateName();
@@ -99,9 +88,8 @@ class RegisterProvider extends ChangeNotifier{
     validateEmail();
     validatePassword();
     validateConfirmPassword();
-    validateRole();
     return [nameError, lastNameError, phoneError, emailError, passwordError,
-    confirmPasswordError, roleError].every((error) => error == null);
+    confirmPasswordError].every((error) => error == null);
   }
 
   Future<bool> validateUser() async {
@@ -129,7 +117,7 @@ class RegisterProvider extends ChangeNotifier{
   }
 
   void saveUser() {
-    user = User(name: name, lastName: lastName, phone: phone, email: email, password: password, role: role);
+    user = User(name: name, lastName: lastName, phone: phone, email: email, password: password);
   }
 
   void cleanAll(){
@@ -148,8 +136,6 @@ class RegisterProvider extends ChangeNotifier{
     passwordErrorApi = null;
     confirmPassword = '';
     confirmPasswordError = null;
-    role = '';
-    roleError = null;
     user = null;
   }
 
