@@ -23,12 +23,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
         provider.getProductDetails(widget.id);
     });
   }
-  
-  @override
-  void dispose(){
-    context.read<ProductDetailsProvider>().clearAll();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context){
@@ -81,7 +75,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
               style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 4),
             Text(
-              productDetailsProvider.price,
+              "\$${productDetailsProvider.price}",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.green,
                 fontWeight: FontWeight.bold
@@ -99,35 +93,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
           ]
         )
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 150,
-              child: FloatingActionButton.extended(
-                heroTag: 'add-cart',
-                label: Text("Add to cart"),
-                icon: Icon(Icons.shopping_cart),
-                onPressed: (){}
-              ),
-            ),
-            SizedBox(height: 8),
-            SizedBox(
-              width: 150,
-              child: FloatingActionButton.extended(
-                heroTag: 'buy-now',
-                backgroundColor: colors.secondary,
-                label: Text("Buy now", style: TextStyle(color: Colors.white)),
-                icon: Icon(Icons.payment, color: Colors.white),
-                onPressed: (){}
-              ),
-            )
-          ]
-        )
-        ,
-      )
     );
   }
 }
