@@ -88,6 +88,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       name: data['name'],
       price: data['price'].toDouble().toString(),
       imagePath: data['image'],
+      description: data['description'],
       stock: data['stock'] ?? 0,
       seller: data['user']?['name'] ?? 'Anónimo'
     );

@@ -32,6 +32,7 @@ query DetallesProducto($id: ID!){
     id
     name
     price
+    description
     image
     user{
       name
