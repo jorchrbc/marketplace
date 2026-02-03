@@ -96,6 +96,11 @@ class MyApp extends StatelessWidget {
             productsRepository: context.read<ProductsRepository>(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => OrderDetailsProvider(
+            orderRepository: context.read<OrderRepository>(),
+           ),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

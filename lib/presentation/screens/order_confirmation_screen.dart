@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
   const OrderConfirmationScreen({super.key});
@@ -72,9 +73,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Detalles despues de implementar"))
-                    );
+                    context.push('/order-details/1');
                   },
                    style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: primaryColor),

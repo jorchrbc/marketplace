@@ -31,3 +31,31 @@ mutation newOrder($address: String!, $payment_method: PaymentMethod!, $items: [O
   }
 }
 ''';
+
+const String getOrderDetailsQuery = r'''
+query OrderById($id: ID!)
+{
+  orderById(id: $id) {
+    user {
+      id
+      name
+      email
+      number
+    }
+    address
+    status
+    payment_method
+    sub_total
+    tax
+    shipping
+    total
+    items {
+      product{
+        name
+      }
+      quantity
+      price
+    }
+  }
+}
+''';

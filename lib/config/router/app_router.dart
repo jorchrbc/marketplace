@@ -59,5 +59,13 @@ final appRouter = GoRouter(
       name: 'checkout',
       builder: (context, state) => const ProcederPagoScreen(),
     ),
+    GoRoute(
+      path: '/order-details/:id',
+      name: 'order-details',
+      builder: (context, state){
+        final id = state.pathParameters['id']!;
+        return OrderDetailsScreen(orderId: id);
+      },
+    ),
   ]
 );

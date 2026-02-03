@@ -3,6 +3,7 @@ import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/datasources/order_datasource.dart';
 import 'package:marketplace/domain/services/token_storage.dart';
 import 'package:marketplace/infrastructure/graphql/order_mutations.dart';
+import 'package:marketplace/domain/entities/order_details.dart';
 
 class OrderDatasourceImpl implements OrderDatasource {
   late final GraphQLClient client;
@@ -51,5 +52,48 @@ class OrderDatasourceImpl implements OrderDatasource {
     }
 
     return false;
+  }
+  
+  @override
+  Future<OrderDetails> getOrderDetails(String id) async {
+    print('id: ${id}');
+    final QueryOptions options = QueryOptions(
+      document: gql(getOrderDetailsQuery),
+      variables: {
+        'id': id
+      },
+    );
+
+    final result = await client.query(options);
+
+    if (result.hasException) {
+      final exception = result.exception!;
+      if(exception.linkException != null){
+        throw Exception('La conexión es inestable.');
+      }
+      if(exception.graphqlErrors.isNotEmpty){
+        final error = exception.graphqlErrors.first;
+        throw Exception(error.message);
+      }
+    }
+    final data = result.data?['orderById'];
+    if(data == null){
+      throw Exception('No se pudieron recopilar los detalles del pedido');
+    }
+    final List<Map<String, dynamic>> products =
+      (data['items'] as List)
+      .map((e) => Map<String, dynamic>.from(e))
+      .toList();
+    final OrderDetails orderDetails = OrderDetails(
+      address: data['address'],
+      status: data['status'],
+      payment_method: data['payment_method'],
+      sub_total: data['sub_total'].toDouble(),
+      tax: data['tax'].toDouble(),
+      shipping: data['shipping'].toDouble(),
+      total: data['total'].toDouble(),
+      products: products,
+    );
+    return orderDetails;
   }
 }
