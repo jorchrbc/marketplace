@@ -38,7 +38,8 @@ class GridViewProductsToBuy extends StatelessWidget{
           text: item.name,
           price: "\$${item.price}",
           image: item.imagePath,
-          id: item.id
+          id: item.id,
+          stock: item.stock,
         );
       }
     );

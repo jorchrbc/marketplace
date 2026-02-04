@@ -8,6 +8,7 @@ class Item extends StatelessWidget {
   final String price;
   final String image;
   final String id;
+  final int stock;
 
   const Item({
     super.key,
@@ -18,6 +19,7 @@ class Item extends StatelessWidget {
     required this.price,
     required this.image,
     required this.id,
+    required this.stock,
   });
 
   @override
@@ -69,14 +71,23 @@ class Item extends StatelessWidget {
                           Text(
                             price,
                             style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(fontWeight: FontWeight.bold),
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(width: 8),
+                    if(stock == 0)
+                    Padding(
+                      padding: EdgeInsets.only(right: 4),
+                      child: const Text(
+                        'Agotado',
+                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                      )
+                    )
+                    else
                     FilledButton(
                       onPressed: () {
                         addProduct(id, 1);
