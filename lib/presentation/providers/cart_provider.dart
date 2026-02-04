@@ -101,4 +101,14 @@ class CartProvider extends ChangeNotifier {
       _total = cart.total;
     }
   }
+  void clearCart() {
+    _items = [];
+    _subTotal = 0.0;
+    _tax = 0.0;
+    _shipping = 0.0;
+    _total = 0.0;
+
+    notifyListeners();
+  }
+
 }

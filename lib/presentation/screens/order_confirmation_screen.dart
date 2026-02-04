@@ -52,7 +52,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Volver al inicio (eliminando las rutas anteriores para no volver a pagar)
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    context.go('/home/0');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,

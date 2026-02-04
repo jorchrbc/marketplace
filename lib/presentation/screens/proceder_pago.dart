@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/providers/cart_provider.dart';
 import 'package:marketplace/presentation/providers/checkout_provider.dart';
 import 'package:marketplace/presentation/screens/order_confirmation_screen.dart';
@@ -198,10 +199,9 @@ class _ProcederPagoScreenState extends State<ProcederPagoScreen> {
                       );
                       
                       if (context.mounted && success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const OrderConfirmationScreen())
-                        );
+                        cartProvider.clearCart();
+                        context.go('/order-confirmation');
+                        
                       } else if (context.mounted && !success) {
                          ScaffoldMessenger.of(context).showSnackBar(
                            const SnackBar(

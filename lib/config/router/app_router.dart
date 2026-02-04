@@ -67,5 +67,10 @@ final appRouter = GoRouter(
         return OrderDetailsScreen(orderId: id);
       },
     ),
+    GoRoute(
+      path: '/order-confirmation',
+      name: 'order-confirmation',
+      builder: (context, state) => OrderConfirmationScreen(),
+    ),
   ]
 );
