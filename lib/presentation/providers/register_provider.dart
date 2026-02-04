@@ -19,6 +19,7 @@ class RegisterProvider extends ChangeNotifier{
   String? passwordErrorApi;
   String confirmPassword = '';
   String? confirmPasswordError;
+  bool isLoading = false;
   User? user;
   AuthRepository authRepository;
 
@@ -93,27 +94,39 @@ class RegisterProvider extends ChangeNotifier{
   }
 
   Future<bool> validateUser() async {
+    isLoading = true;
     saveUser();
-    var problems = await register();
-    if(problems["connection"] != null){
-      throw Exception(problems["connection"]);
+    try{
+      var problems = await register();
+      if(problems["connection"] != null){
+        isLoading = false;
+        throw Exception(problems["connection"]);
+      }
+      if(problems["email"] != null){
+        //emailErrorApi = problems["email"].toString();
+        emailErrorApi = "Correo inválido";
+      }else{emailErrorApi = null;}
+      if(problems["number"] != null){
+        //phoneErrorApi = problems["number"].toString();
+        phoneErrorApi = "Teléfono inválido";
+      }else{phoneErrorApi = null;}
+      if(problems["password"] != null){
+        //passwordErrorApi = problems["password"].toString();
+        passwordErrorApi = "Contraseña inválida";
+      }else{passwordErrorApi = null;}
+      if(validateAllFields()){
+        isLoading = false;
+        notifyListeners();
+        return true;
+      }
+      isLoading = false;
+      notifyListeners();
+      return false;
+    } catch(e){
+      isLoading = false;
+      notifyListeners();
+      throw Exception("Error de conexión");
     }
-    if(problems["email"] != null){
-      //emailErrorApi = problems["email"].toString();
-      emailErrorApi = "Correo inválido";
-    }else{emailErrorApi = null;}
-    if(problems["number"] != null){
-      //phoneErrorApi = problems["number"].toString();
-      phoneErrorApi = "Teléfono inválido";
-    }else{phoneErrorApi = null;}
-    if(problems["password"] != null){
-      //passwordErrorApi = problems["password"].toString();
-      passwordErrorApi = "Contraseña inválida";
-    }else{passwordErrorApi = null;}
-    if(validateAllFields()){
-      return true;
-    }
-    return false;
   }
 
   void saveUser() {

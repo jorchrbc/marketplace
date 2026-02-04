@@ -65,113 +65,121 @@ class _RegisterFormState extends State<_RegisterForm> {
   Widget build(BuildContext context) {
     final registerProvider = Provider.of<RegisterProvider>(context);
 
-    return Form(
-      child: Column(
-        children: [
-          CustomTextFormField(
-            hint: 'Nombre',
-            errorText: registerProvider.nameError,
-            icon: const Icon(Icons.person_outlined),
-            onChanged: (value) {
-              registerProvider.name = value;
-              registerProvider.validateName();
-            },
-          ),
-          CustomTextFormField(
-            hint: 'Apellidos',
-            errorText: registerProvider.lastNameError,
-            icon: const Icon(Icons.person),
-            onChanged: (value) {
-              registerProvider.lastName = value;
-              registerProvider.validateLastName();
-            },
-          ),
-          CustomTextFormField(
-            hint: 'Teléfono',
-            errorText: registerProvider.phoneError,
-            icon: const Icon(Icons.phone_outlined),
-            onChanged: (value) {
-              registerProvider.phone = value;
-              registerProvider.phoneErrorApi = null;
-              registerProvider.validatePhone();
-            },
-          ),
-          CustomTextFormField(
-            hint: 'Correo electrónico',
-            errorText: registerProvider.emailError,
-            icon: const Icon(Icons.email_outlined),
-            onChanged: (value) {
-              registerProvider.email = value;
-              registerProvider.emailErrorApi = null;
-              registerProvider.validateEmail();
-            },
-          ),
-          CustomTextFormField(
-            hint: 'Contraseña',
-            errorText: registerProvider.passwordError,
-            icon: const Icon(Icons.lock_outline),
-            onChanged: (value) {
-              registerProvider.password = value;
-              registerProvider.passwordErrorApi = null;
-              registerProvider.validatePassword();
-            },
-          ),
-          CustomTextFormField(
-            hint: 'Confirmar contraseña',
-            errorText: registerProvider.confirmPasswordError,
-            icon: const Icon(Icons.lock),
-            onChanged: (value) {
-              registerProvider.confirmPassword = value;
-              registerProvider.validateConfirmPassword();
-            },
-          ),
+    return Stack(
+      children: [
+        Form(
+          child: Column(
+            children: [
+              CustomTextFormField(
+                hint: 'Nombre',
+                errorText: registerProvider.nameError,
+                icon: const Icon(Icons.person_outlined),
+                onChanged: (value) {
+                  registerProvider.name = value;
+                  registerProvider.validateName();
+                },
+              ),
+              CustomTextFormField(
+                hint: 'Apellidos',
+                errorText: registerProvider.lastNameError,
+                icon: const Icon(Icons.person),
+                onChanged: (value) {
+                  registerProvider.lastName = value;
+                  registerProvider.validateLastName();
+                },
+              ),
+              CustomTextFormField(
+                hint: 'Teléfono',
+                errorText: registerProvider.phoneError,
+                icon: const Icon(Icons.phone_outlined),
+                onChanged: (value) {
+                  registerProvider.phone = value;
+                  registerProvider.phoneErrorApi = null;
+                  registerProvider.validatePhone();
+                },
+              ),
+              CustomTextFormField(
+                hint: 'Correo electrónico',
+                errorText: registerProvider.emailError,
+                icon: const Icon(Icons.email_outlined),
+                onChanged: (value) {
+                  registerProvider.email = value;
+                  registerProvider.emailErrorApi = null;
+                  registerProvider.validateEmail();
+                },
+              ),
+              CustomTextFormField(
+                hint: 'Contraseña',
+                errorText: registerProvider.passwordError,
+                icon: const Icon(Icons.lock_outline),
+                onChanged: (value) {
+                  registerProvider.password = value;
+                  registerProvider.passwordErrorApi = null;
+                  registerProvider.validatePassword();
+                },
+              ),
+              CustomTextFormField(
+                hint: 'Confirmar contraseña',
+                errorText: registerProvider.confirmPasswordError,
+                icon: const Icon(Icons.lock),
+                onChanged: (value) {
+                  registerProvider.confirmPassword = value;
+                  registerProvider.validateConfirmPassword();
+                },
+              ),
 
-          const SizedBox(height: 50),
+              const SizedBox(height: 50),
 
-          CustomElevatedButton(
-            onPressed: () async {
-              if (!registerProvider.validateAllFields()) {
-                return;
-              }
+              CustomElevatedButton(
+                onPressed: () async {
+                  if (!registerProvider.validateAllFields()) {
+                    return;
+                  }
 
-              try {
-                final validated = await registerProvider.validateUser();
+                  try {
+                    final validated = await registerProvider.validateUser();
 
-                if (validated) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Cuenta creada: ${registerProvider.user?.name ?? ''}',
-                      ),
-                    ),
-                  );
+                    if (validated) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Cuenta creada: ${registerProvider.user?.name ?? ''}',
+                          ),
+                        ),
+                      );
 
+                      registerProvider.cleanAll();
+                      context.goNamed('login');
+                    } else {
+                      return;
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error en la conexión')),
+                    );
+                  }
+                },
+                text: 'Crear',
+              ),
+
+              const SizedBox(height: 15),
+
+              CustomElevatedButton(
+                onPressed: () {
                   registerProvider.cleanAll();
                   context.goNamed('login');
-                } else {
-                  return;
-                }
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error en la conexión')),
-                );
-              }
-            },
-            text: 'Crear',
+                },
+                text: 'Regresar',
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ],
           ),
-
-          const SizedBox(height: 15),
-
-          CustomElevatedButton(
-            onPressed: () {
-              registerProvider.cleanAll();
-              context.goNamed('login');
-            },
-            text: 'Regresar',
-            color: Theme.of(context).colorScheme.inversePrimary,
-          ),
-        ],
-      ),
+        ),
+        if(registerProvider.isLoading)
+        Center(
+              child: CircularProgressIndicator(),
+        )
+      ]
     );
   }
 }
