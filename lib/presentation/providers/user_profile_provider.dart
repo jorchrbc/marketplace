@@ -16,10 +16,10 @@ class UserProfileProvider extends ChangeNotifier{
   UserProfileProvider({required this.authRepository});
 
   void clearAll(){
-   name = '';
-   lastName = '';
-   phone = '';
-   email = '';
+    name = '';
+    lastName = '';
+    phone = '';
+    email = '';
     notifyListeners();
   }
 

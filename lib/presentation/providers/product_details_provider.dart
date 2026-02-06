@@ -4,6 +4,7 @@ import 'package:marketplace/domain/repositories/products_repository.dart';
 import 'package:marketplace/domain/entities/details.dart';
 
 class ProductDetailsProvider extends ChangeNotifier{
+  bool _disposed = false;
   String name = '';
   String price = '';
   String seller = '';
@@ -18,6 +19,12 @@ class ProductDetailsProvider extends ChangeNotifier{
 
   ProductDetailsProvider({required this.productsRepository});
 
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+  
   void clearAll(){
     name = '';
     price = '';
@@ -27,7 +34,10 @@ class ProductDetailsProvider extends ChangeNotifier{
     image = null;
     errorMessage = null;
     isLoading = false;
-    notifyListeners();
+    if (!_disposed) {
+      notifyListeners(); // Solo notifica si el provider sigue activo
+    }
+
   }
   
   Future<void> getProductDetails(String id) async{
