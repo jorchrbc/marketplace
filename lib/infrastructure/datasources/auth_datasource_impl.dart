@@ -144,7 +144,7 @@ class AuthDatasourceImpl implements AuthDatasource {
     } on TimeoutException {
       throw Exception('Timeout al cerrar sesión');
     } on SocketException {
-      throw Exception('Error en el servidor al cerrar sesión');
+      throw Exception('Ocurrió un error inesperado');
     }
   }
 }

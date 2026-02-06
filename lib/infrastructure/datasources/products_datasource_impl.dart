@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/core/constants.dart';
@@ -47,7 +48,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       }
     );
     try {
-      final result = await client.mutate(options).timeout(const Duration(seconds: 60));
+      final result = await client.mutate(options).timeout(const Duration(seconds: 6));
       
       if (result.hasException) {
         final exception = result.exception!;
@@ -61,7 +62,9 @@ class ProductsDatasourceImpl implements ProductsDatasource {
         }
       }
     } on TimeoutException {
-       throw Exception("La petición tardó demasiado en responder.");
+       throw Exception("Está tardando más de lo esperado");
+    } on SocketException {
+      throw Exception("Ocurrió un error inesperado");
     }
   }
 
