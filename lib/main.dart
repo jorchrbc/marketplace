@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<AuthRepository>(
           create: (_) => AuthRepositoryImpl(
-            datasource: AuthDatasourceImpl(), tokenStorage: tokenStorage
+            tokenStorage: tokenStorage,
+            datasource: AuthDatasourceImpl(tokenStorage: tokenStorage)
           ),
         ),
         Provider<ProductsRepository>(

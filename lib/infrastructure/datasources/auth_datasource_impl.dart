@@ -3,15 +3,23 @@ import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:marketplace/domain/datasources/auth_datasource.dart';
 import 'package:marketplace/domain/entities/user.dart';
+import 'package:marketplace/domain/services/token_storage.dart';
 import 'package:marketplace/infrastructure/graphql/auth_mutations.dart';
 class AuthDatasourceImpl implements AuthDatasource {
   late final GraphQLClient client;
+  final TokenStorage tokenStorage;
 
-  AuthDatasourceImpl(){
-    // final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+  AuthDatasourceImpl({required this.tokenStorage}){
     final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final authLink = AuthLink(
+      getToken: () async{
+        final token = await tokenStorage.getToken();
+        return token;
+      },
+    );
+
     client = GraphQLClient(
-        link: httpLink,
+        link: authLink.concat(httpLink),
         cache: GraphQLCache(),
       );
   }

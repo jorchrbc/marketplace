@@ -33,7 +33,7 @@ class UserProfileProvider extends ChangeNotifier{
       lastName = user.lastName;
       phone = user.phone;
       email = user.email;
-     // User user = await authRepository.(email, password)
+   
     }catch(e){
       errorMessage = e.toString();
     }finally {
