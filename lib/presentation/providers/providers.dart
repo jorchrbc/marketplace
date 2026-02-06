@@ -8,3 +8,4 @@ export 'vendor_products_provider.dart';
 export 'home_provider.dart';
 export 'buy_products_provider.dart';
 export 'order_details_provider.dart';
+export 'user_profile_provider.dart';

@@ -37,3 +37,47 @@ const String logoutMutation = r'''
     logout
   }
 ''';
+
+const String viewProfileQuery = r'''
+    query{
+    me{
+    id
+    name
+    email
+    number
+    email_verified_at
+    created_at
+    updated_at
+
+    products{
+    id
+    name
+    price
+    stock
+    image
+    description
+    created_at
+    updated_at
+    user_id
+    }
+    }
+    }
+''';
+
+const String updateProfile = r'''
+  mutation{
+  updateProfile(name: "string",phone_number: "string"){
+  status
+  message
+  user{
+  id
+  name
+  email
+  number
+  email_verified_at
+  created_at
+  updated_at
+  }
+  }
+  }
+''';

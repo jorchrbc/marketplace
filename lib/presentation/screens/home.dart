@@ -33,7 +33,9 @@ class HomeScreen extends StatelessWidget{
               SnackBar(content: Text(homeProvider.errorMessage!)),
             );
           }
-          context.go('/');
+          if(context.mounted){
+            context.go('/');
+          }
         },
         goCart: () {
           context.push('/cart');
