@@ -15,12 +15,15 @@ class UserProfileProvider extends ChangeNotifier{
 
   UserProfileProvider({required this.authRepository});
 
-  void clearAll(){
+  void clearAll({bool notify=true}){
     name = '';
     lastName = '';
     phone = '';
     email = '';
-    notifyListeners();
+    if(notify){
+      notifyListeners();
+    }
+    
   }
 
  Future<void> getUserInfo() async{

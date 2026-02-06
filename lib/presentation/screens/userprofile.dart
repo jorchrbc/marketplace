@@ -14,35 +14,22 @@ class UserprofileScreen extends StatefulWidget{
 
 
 class _UserProfileScreenState extends State<UserprofileScreen> {
-  late UserProfileProvider _userProfileProvider;
 
   @override
   void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    _userProfileProvider.clearAll();
-    _userProfileProvider.getUserInfo();
+      final provider = context.read<UserProfileProvider>();
+      provider.clearAll();
+      provider.getUserInfo();
     });
  
   }
-  
-  @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
-    _userProfileProvider = context.read<UserProfileProvider>();
-  }
-
-
-  @override
-  void dispose(){
-    _userProfileProvider.clearAll();
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    final userprofileprovider = Provider.of<UserProfileProvider>(context);
+    final userprofileprovider = context.watch<UserProfileProvider>();
+
     
     if(userprofileprovider.isLoading){
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
