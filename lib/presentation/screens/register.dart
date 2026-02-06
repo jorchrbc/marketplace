@@ -125,34 +125,6 @@ class _RegisterFormState extends State<_RegisterForm> {
               registerProvider.validateConfirmPassword();
             },
           ),
-          const SizedBox(height: 10),
-
-          ElevatedButton(
-            onPressed: () async {
-              FocusScope.of(context).requestFocus(_emptyFocusNode);
-
-              final result = await showRadioOptionDialog(
-                context: context,
-                title: "Selecciona un rol",
-                option1: "Comprador",
-                option2: "Vendedor",
-              );
-
-              if (result != null) {
-                registerProvider.role = result;
-              }
-              registerProvider.validateRole();
-            },
-            child: const Text("Selecciona un rol"),
-          ),
-
-          if (registerProvider.roleError != null) ...[
-            const SizedBox(height: 5),
-            Text(
-              registerProvider.roleError!,
-              style: const TextStyle(color: Colors.red, fontSize: 12),
-            ),
-          ],
 
           const SizedBox(height: 50),
 

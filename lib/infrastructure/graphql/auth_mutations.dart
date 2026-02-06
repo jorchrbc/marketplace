@@ -4,21 +4,16 @@ const String createUserMutation = r'''
     $email: String!, 
     $number: String!, 
     $password: String!, 
-    $role_id: ID!
   ) {
     createUser(
       name: $name,
       email: $email,
       number: $number,
       password: $password,
-      role_id: $role_id
     ) {
-      id
       name
       email
-      role {
-        name
-      }
+      number
     }
   }
 ''';
@@ -40,5 +35,49 @@ const String loginMutation = r'''
 const String logoutMutation = r'''
   mutation Logout {
     logout
+  }
+''';
+
+const String viewProfileQuery = r'''
+    query{
+    me{
+    id
+    name
+    email
+    number
+    email_verified_at
+    created_at
+    updated_at
+
+    products{
+    id
+    name
+    price
+    stock
+    image
+    description
+    created_at
+    updated_at
+    user_id
+    }
+    }
+    }
+''';
+
+const String updateProfile = r'''
+  mutation{
+  updateProfile(name: "string",phone_number: "string"){
+  status
+  message
+  user{
+  id
+  name
+  email
+  number
+  email_verified_at
+  created_at
+  updated_at
+  }
+  }
   }
 ''';

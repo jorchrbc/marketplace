@@ -122,6 +122,7 @@ class _VendorProductsViewState extends State<VendorProductsView> {
                                       child: const Text("Eliminar", style: TextStyle(color: Colors.red)),
                                       onPressed: () {
                                         context.read<VendorProductsProvider>().deleteProduct(product.id);
+                                        context.read<BuyProductsProvider>().getProductsToBuy();
                                         Navigator.of(context).pop();
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           const SnackBar(content: Text('Producto eliminado'))

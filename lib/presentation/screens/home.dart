@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:marketplace/presentation/providers/home_provider.dart';
@@ -23,25 +23,38 @@ class HomeScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     final homeProvider = Provider.of<HomeProvider>(context);
+    
     return Scaffold(
       appBar: CustomAppBar(
         logout: () async{
-          try{
-            await homeProvider.logoutUser();
-          } catch(e){
+          await homeProvider.logoutUser();
+          if(homeProvider.errorMessage != null){
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Error en la conexión')),
+              SnackBar(content: Text(homeProvider.errorMessage!)),
             );
+          }
+          if(context.mounted){
+            context.go('/');
           }
         },
         goCart: () {
           context.push('/cart');
+        },
+        goUserProfile: (){
+          context.push('/user-profile');
         }
       ),
-      body: IndexedStack(
-        index: pageIndex,
-        
-        children: viewRoutes,
+      body: Stack(
+        children: [
+          IndexedStack(
+            index: pageIndex,
+            children: viewRoutes,
+          ),
+          if(homeProvider.isLoading)
+            Container(
+              child: const Center(child: CircularProgressIndicator()),
+            )
+        ]
       ),
       bottomNavigationBar: CustomBottomNavigationBar(currentIndex: pageIndex),
     );

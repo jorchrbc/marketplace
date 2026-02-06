@@ -32,6 +32,7 @@ query DetallesProducto($id: ID!){
     id
     name
     price
+    description
     image
     user{
       name
@@ -54,8 +55,8 @@ query MisProductos{
 ''';
   
 const String getProductsToBuyQuery = r'''
-query getProducts {
-  allProducts(first: 10, page: 1) {
+query getProducts($page: Int!) {
+  allProducts(first: 10, page: $page) {
     paginatorInfo {
       count
       currentPage

@@ -13,33 +13,21 @@ class ProductDetailsScreen extends StatefulWidget{
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
-  late ProductDetailsProvider _productDetailsProvider;
   
   @override
   void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        _productDetailsProvider.clearAll();
-        _productDetailsProvider.getProductDetails(widget.id);
+        final provider  = context.read<ProductDetailsProvider>();
+        provider.clearAll();
+        provider.getProductDetails(widget.id);
     });
-  }
-
-  @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
-    _productDetailsProvider = context.read<ProductDetailsProvider>();
-  }
-  
-  @override
-  void dispose(){
-    _productDetailsProvider.clearAll();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context){
     final colors = Theme.of(context).colorScheme;
-    final productDetailsProvider = Provider.of<ProductDetailsProvider>(context);
+    final productDetailsProvider = context.watch<ProductDetailsProvider>();
 
     if(productDetailsProvider.isLoading){
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -47,7 +35,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
     if(productDetailsProvider.errorMessage != null) {
       return Scaffold(
         body: Center(
-          child: Text(productDetailsProvider.errorMessage!)
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.wifi_off,
+                size: 80,
+                color: Colors.grey
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: (){
+                  context.read<ProductDetailsProvider>()
+                    ..clearAll()
+                    ..getProductDetails(widget.id);
+                },
+                child: const Text('Reintentar')
+              )
+            ]
+          )
         )
       );
     }
@@ -69,7 +75,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
               style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 4),
             Text(
-              productDetailsProvider.price,
+              "\$${productDetailsProvider.price}",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.green,
                 fontWeight: FontWeight.bold
@@ -87,35 +93,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>{
           ]
         )
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0, right: 10.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 150,
-              child: FloatingActionButton.extended(
-                heroTag: 'add-cart',
-                label: Text("Add to cart"),
-                icon: Icon(Icons.shopping_cart),
-                onPressed: (){}
-              ),
-            ),
-            SizedBox(height: 8),
-            SizedBox(
-              width: 150,
-              child: FloatingActionButton.extended(
-                heroTag: 'buy-now',
-                backgroundColor: colors.secondary,
-                label: Text("Buy now", style: TextStyle(color: Colors.white)),
-                icon: Icon(Icons.payment, color: Colors.white),
-                onPressed: (){}
-              ),
-            )
-          ]
-        )
-        ,
-      )
     );
   }
 }

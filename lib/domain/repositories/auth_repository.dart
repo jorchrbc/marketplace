@@ -4,4 +4,5 @@ abstract class AuthRepository{
   Future<Map<String,dynamic>> registerUser(User user);
   Future<Map<String, dynamic>> loginUser(String email, String password);
   Future<void> logoutUser();
+  Future<User> viewProfile();
 }

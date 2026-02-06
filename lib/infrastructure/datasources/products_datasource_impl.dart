@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:marketplace/core/constants.dart';
 import 'package:marketplace/domain/datasources/products_datasource.dart';
 import 'package:marketplace/infrastructure/graphql/products_mutations.dart';
 import 'package:marketplace/domain/entities/product.dart';
@@ -13,7 +14,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   final TokenStorage tokenStorage;
 
   ProductsDatasourceImpl({required this.tokenStorage}){
-    final httpLink = HttpLink('https://rumpless-cooingly-beaulah.ngrok-free.dev/graphql');
+    final httpLink = HttpLink(endpoint);
     final authLink = AuthLink(
       getToken: () async{
         final token = await tokenStorage.getToken();
@@ -51,6 +52,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       if (result.hasException) {
         final exception = result.exception!;
         if(exception.linkException != null){
+          print(exception.linkException.toString());
           throw Exception("La conexión es inestable.");
         }
         if(exception.graphqlErrors.isNotEmpty){
@@ -85,8 +87,9 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     final data = result.data?['viewProductsById'];
     Details details = Details(
       name: data['name'],
-      price: data['price'].toDouble().toString(),
+      price: data['price'].toDouble().toStringAsFixed(2),
       imagePath: data['image'],
+      description: data['description'] ?? 'Sin descripción',
       stock: data['stock'] ?? 0,
       seller: data['user']?['name'] ?? 'Anónimo'
     );
@@ -94,12 +97,13 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   }
 
   @override
-  Future<List> getProductsToBuy() async{
+  Future<List> getProductsToBuy({int page = 1}) async{
     final QueryOptions options = QueryOptions(
       document: gql(getProductsToBuyQuery),
+      fetchPolicy: FetchPolicy.noCache,
       variables: {
         'first': 10,
-        'page': 1
+        'page': page
       }
     );
     final result = await client.query(options);
@@ -118,7 +122,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     for (var item in data){
       product_details.add(Details(
           name: item['name'],
-          price: item['price'].toDouble().toString(),
+          price: item['price'].toDouble().toStringAsFixed(2),
           imagePath: item['image'],
           stock: item['stock'],
           seller: item['user']?['name'] ?? 'Anónimo',

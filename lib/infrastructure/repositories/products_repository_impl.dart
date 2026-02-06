@@ -29,7 +29,7 @@ class ProductsRepositoryImpl extends ProductsRepository{
   }
   
   @override
-  Future<List> getProductsToBuy() async{
-    return datasource.getProductsToBuy();
+  Future<List> getProductsToBuy({int page = 1}) async{
+    return datasource.getProductsToBuy(page: page);
   }
 }

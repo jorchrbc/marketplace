@@ -4,10 +4,11 @@ import 'package:marketplace/domain/repositories/products_repository.dart';
 import 'package:marketplace/domain/entities/details.dart';
 
 class ProductDetailsProvider extends ChangeNotifier{
+  bool _disposed = false;
   String name = '';
   String price = '';
   String seller = '';
-  String description = "The first title in the series, Age of Empires, focused on events in Europe, Africa and Asia, spanning from the Stone Age to the Iron Age; the expansion game explored the formation and expansion of the Roman Empire. The sequel, Age of Empires II: The Age of Kings, was set in the Middle Ages, while its expansion focused partially on the Spanish conquest of the Aztec Empire.";
+  String description = "";
   Image? image;
   List<Widget> image_cards = [];
 
@@ -18,15 +19,25 @@ class ProductDetailsProvider extends ChangeNotifier{
 
   ProductDetailsProvider({required this.productsRepository});
 
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+  
   void clearAll(){
     name = '';
     price = '';
     seller = '';
+    description = '';
     image_cards.clear();
     image = null;
     errorMessage = null;
     isLoading = false;
-    notifyListeners();
+    if (!_disposed) {
+      notifyListeners(); // Solo notifica si el provider sigue activo
+    }
+
   }
   
   Future<void> getProductDetails(String id) async{
@@ -38,7 +49,7 @@ class ProductDetailsProvider extends ChangeNotifier{
       name = details.name;
       price = details.price.toString();
       seller = "Vendedor: ${details.seller}";
-      
+      description = details.description;
       image = Image.network(
         details.imagePath!,
         fit: BoxFit.cover,
