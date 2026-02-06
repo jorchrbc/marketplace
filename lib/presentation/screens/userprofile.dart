@@ -82,34 +82,31 @@ class _UserProfileScreenState extends State<UserprofileScreen> {
             CustomCard(icon: Icons.email_outlined, title: 'Correo', subtitle: userprofileprovider.email),
             SizedBox(height: 5),
 
+            /*
             ElevatedButton(onPressed: (){
               CustomDialog(userprofileprovider.phone, '${userprofileprovider.name} ${userprofileprovider.lastName}');
             }, 
             child: Text('Editar')
             ),
+            */
 
-            // SizedBox(height: 5),
-
-            // Row(
-            //   children: [
-            //     CustomCard(icon: Icons.shopping_bag_outlined, title: 'Pedidos', subtitle: '',
-            //       onTap: () { 
-            //         context.push('/home');
-            //       }
-            //     ),
-            //     CustomCard(icon: Icons.list_alt_rounded, title: 'Productos', subtitle: '',
-            //       onTap: (){
-            //         context.push('/home');
-            //     },)
-            //   ],
-            // ),
-            // SizedBox(height: 50),
-
-            // CustomCard(icon: Icons.mode_edit_outline_outlined, title: 'Editar información', subtitle: '',
-            //   onTap: (){
-            //     CustomDialog(userprofileprovider.phone, '${userprofileprovider.name} ${userprofileprovider.lastName}');
-            //   },
-            // )
+            CustomCard(icon: Icons.mode_edit_outline_outlined, title: 'Editar información', subtitle: '',
+              onTap: (){
+                CustomDialog(userprofileprovider.phone, '${userprofileprovider.name} ${userprofileprovider.lastName}');
+              },
+            ),
+            SizedBox(height: 10),
+            CustomCard(icon: Icons.list_alt_outlined, title: 'Pedidos', subtitle: '',
+              onTap: (){
+                //context.push('order-details');
+              },
+            ),
+            SizedBox(height: 5),
+            CustomCard(icon: Icons.shopping_bag_outlined, title: 'Productos', subtitle: '',
+            onTap: (){
+              //context.push('vendor-products');
+            },
+            )
           ],
         ),
       ),
