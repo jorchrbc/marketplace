@@ -52,6 +52,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
       if (result.hasException) {
         final exception = result.exception!;
         if(exception.linkException != null){
+          print(exception.linkException.toString());
           throw Exception("La conexión es inestable.");
         }
         if(exception.graphqlErrors.isNotEmpty){
@@ -86,7 +87,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     final data = result.data?['viewProductsById'];
     Details details = Details(
       name: data['name'],
-      price: data['price'].toDouble().toString(),
+      price: data['price'].toDouble().toStringAsFixed(2),
       imagePath: data['image'],
       description: data['description'] ?? 'Sin descripción',
       stock: data['stock'] ?? 0,
@@ -121,7 +122,7 @@ class ProductsDatasourceImpl implements ProductsDatasource {
     for (var item in data){
       product_details.add(Details(
           name: item['name'],
-          price: item['price'].toDouble().toString(),
+          price: item['price'].toDouble().toStringAsFixed(2),
           imagePath: item['image'],
           stock: item['stock'],
           seller: item['user']?['name'] ?? 'Anónimo',
