@@ -22,6 +22,11 @@ class ProductsRepositoryImpl extends ProductsRepository{
   Future<List<VendorProduct>> getMyProducts() async {
     return await datasource.getMyProducts();
   }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    return await datasource.deleteProduct(id);
+  }
   
   @override
   Future<List> getProductsToBuy() async{

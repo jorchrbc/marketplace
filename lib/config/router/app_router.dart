@@ -1,9 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
+import 'package:marketplace/presentation/views/views.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
+    GoRoute(
+      path: '/vendor-products',
+      name: 'vendor-products',
+      builder: (context, state) => const VendorProductsView(),
+    ),
     GoRoute(
       path: '/',
       name: 'login',
