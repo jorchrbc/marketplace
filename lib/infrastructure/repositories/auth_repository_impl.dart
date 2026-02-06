@@ -23,6 +23,12 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
+  Future<User> viewProfile() async{
+    return await datasource.viewUser();
+  
+  }
+
+  @override
   Future<void> logoutUser() {
     return datasource.logoutUser();
   }

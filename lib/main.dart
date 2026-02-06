@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
              datasource: OrderDatasourceImpl(tokenStorage: tokenStorage)
            )
         ),
+        
         ChangeNotifierProvider(
           create: (context) => RegisterProvider(
             authRepository: context.read<AuthRepository>(),
@@ -92,6 +93,11 @@ class MyApp extends StatelessWidget {
             authRepository: context.read<AuthRepository>(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => UserProfileProvider(
+           authRepository: context.read<AuthRepository>(),
+          ),
+        )
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

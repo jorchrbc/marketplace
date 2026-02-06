@@ -81,6 +81,42 @@ class AuthDatasourceImpl implements AuthDatasource {
   }
 
   @override
+    Future<User> viewUser() async {
+      final QueryOptions options =  QueryOptions(
+        document: gql(viewProfileQuery),
+      );
+
+      final result = await client.query(options);
+
+      if(result.hasException){
+        final exception = result.exception!;
+          if(exception.linkException != null){
+            throw Exception("La conexión es inestable");
+          }
+          if(exception.graphqlErrors.isNotEmpty){
+            final error = exception.graphqlErrors.first;
+            throw Exception(error.message);
+          }
+        }
+      
+
+    final data = result.data?['me'];
+  User user = User(
+    name: data['name'],
+    lastName: data['lastname'],
+    phone: data['phone'],
+    email: data['email'],
+    password: data['password'],
+    role: data['role'],
+  );
+    return user;
+  }
+
+
+    
+
+
+  @override
   Future<void> logoutUser() async {
     final MutationOptions options = MutationOptions(
       document: gql(logoutMutation),
